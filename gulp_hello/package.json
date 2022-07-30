@@ -1,0 +1,23 @@
+{
+  "name": "gulp_hello",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "dashu",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@babel/preset-env": "^7.18.6",
+    "gulp": "^4.0.2",
+    "gulp-babel": "^8.0.0",
+    "gulp-terser": "^2.1.0"
+  },
+  "browserslist": [
+    "Android >= 5",
+    "ios >= 10",
+    "> 0.5%"
+  ]
+}

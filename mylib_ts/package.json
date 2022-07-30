@@ -1,0 +1,46 @@
+{
+  "name": "mylib_ts",
+  "version": "1.0.0",
+  "description": "- 使用TS编写类库， 使用Rollup打包 使用`@babel/parsets-env`转移`es6句法`, 使用@babel/runtime 给`es6 API`提供垫片。",
+  "typings": "types/index.d.ts",
+  "main": "lib/index.umd.js",
+  "module": "lib/index.es.mjs",
+  "exports": {
+    ".": {
+      "import": "./lib/index.es.mjs",
+      "require": "./lib/index.umd.js"
+    }
+  },
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "build": "rimraf lib/* && rollup -c",
+    "build:ts": "rimraf types/* && npx tsc --declaration -p ./ -t esnext --emitDeclarationOnly --outDir types"
+  },
+  "keywords": [],
+  "author": "dashu",
+  "license": "ISC",
+  "browserslist": [
+    "Android >= 6",
+    "ios >= 11",
+    ">0.5%"
+  ],
+  "devDependencies": {
+    "@babel/cli": "^7.18.9",
+    "@babel/core": "^7.18.9",
+    "@babel/plugin-transform-runtime": "^7.18.9",
+    "@babel/preset-env": "^7.18.9",
+    "@babel/runtime": "^7.18.9",
+    "@rollup/plugin-babel": "^5.3.1",
+    "rimraf": "^3.0.2",
+    "rollup": "^2.77.0",
+    "@rollup/plugin-commonjs": "^22.0.1",
+    "@rollup/plugin-node-resolve": "^13.3.0",
+    "@babel/preset-typescript": "^7.18.6",
+    "typescript": "^4.7.4"
+  },
+  "dependencies": {
+    "@babel/runtime-corejs3": "^7.18.9"
+  }
+}

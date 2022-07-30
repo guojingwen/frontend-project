@@ -1,0 +1,23 @@
+{
+  "name": "babel_lib",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "rm -rf lib && npx babel src/ --out-dir lib"
+  },
+  "keywords": [],
+  "author": "dashu",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/cli": "^7.18.9",
+    "@babel/core": "^7.18.9",
+    "@babel/plugin-proposal-do-expressions": "^7.18.6",
+    "@babel/plugin-transform-runtime": "^7.18.9",
+    "@babel/preset-env": "^7.18.9",
+    "@babel/runtime": "^7.18.9"
+  },
+  "dependencies": {
+    "@babel/runtime-corejs3": "^7.18.9"
+  }
+}
