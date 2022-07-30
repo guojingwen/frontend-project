@@ -2,11 +2,8 @@ module.exports = {
     "presets": [
         ["@babel/preset-env",  {
           "modules": false,
-          // "useBuiltIns": false,
-          // corejs: 3,
           loose: true, // 看得懂的代码
         }],
-        "@babel/preset-typescript"
     ],
     plugins: [
       [

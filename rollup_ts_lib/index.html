@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script src="https://cdn.bootcdn.net/ajax/libs/lodash.js/4.17.21/lodash.core.js"></script>
+    <script src="./lib/mylib.umd.js"></script>
+
+    <script>
+        const event = new $mylib.default();
+        event.once('revice', function(...args){
+            console.log('revice', ...args);
+        });
+        setTimeout(() => {
+            event.emit('revice', '111')
+        }, 1000)
+        setTimeout(() => {
+            event.emit('revice', '222')
+        }, 2000)
+    </script>
+</body>
+</html>

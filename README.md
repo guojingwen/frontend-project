@@ -26,4 +26,26 @@
 - [x] 提案句法，如do语句
 - [x] 提案api
 - [x] 打包多文件时es6句法帮助函数重复注入问题
- 
+
+
+## rollup_js_lib
+使用`rollup`构建一个类库
+- [x] 支持es6 句法
+- [x] 支持es6 API
+- [x] 支持`cmd` `umd` `esm`
+
+
+## rollup_ts_lib
+使用`rollup` + `TS`构建一个类库
+- [x] 支持es6 句法
+- [x] 支持es6 API
+- [x] 支持TS & 自动生成声明文件
+- [x] 支持`cmd` `umd` `esm`
+- [x] 支持排除依赖包构建
+
+### 排除依赖包
+1. 配置babel plugin  `lodash` 应该是因为lodash不是使用esm规范所以需要babel插件
+2. 配置rollup.config.js 
+   1. 配置input `globals: {loadsh: '_'}`
+   2. 配置external `['lodash']`,
+

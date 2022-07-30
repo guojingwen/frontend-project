@@ -7,12 +7,20 @@ const pkg = require('./package.json')
 const resolve = function(...args) {
   return path.resolve(__dirname, ...args);
 };
-const input = resolve('./src/index.js')
+const input = resolve('./src/index.js');
+const plugins = [
+  commonjs(),
+  babel({
+    babelHelpers: 'runtime',
+    exclude: 'node_modules/**',
+  }),
+]
+
 export default [
   {
     input,
     output: {
-        file: resolve(pkg.main),
+        file: resolve(pkg.browser),
         format: 'umd',
         name: '$mylib',
     },
@@ -20,11 +28,19 @@ export default [
       nodeResolve.default({
         browser: true,
       }),
-      commonjs(),
-      babel({
-        babelHelpers: 'runtime',
-        exclude: 'node_modules/**',
-      }),
+      ...plugins,
+    ],
+    external: ['lodash'],
+  },
+  {
+    input,
+    output: [
+      { file: pkg.main, format: 'cjs' },
+			{ file: pkg.module, format: 'es' }
+    ],
+    plugins: [
+      nodeResolve.default(),
+      ...plugins,
     ],
   }
 ];

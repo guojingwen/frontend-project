@@ -1,13 +1,15 @@
 {
-  "name": "mylib_js",
+  "name": "rollup_js_lib",
   "version": "1.0.0",
-  "description": "- 使用Rollup打包 使用`@babel/parsets-env`转移`es6句法`, 使用@babel/runtime 给`es6 API`提供垫片。",
-  "main": "lib/index.umd.js",
+  "description": "- Rollup构建类库",
+  "main": "lib/mylib.cjs.js",
+  "module": "lib/mylib.esm.js",
+  "browser": "lib/mylib.umd.js",
   "files": [
     "lib"
   ],
   "scripts": {
-    "build": "rimraf lib/* && rollup -c"
+    "build": "rimraf lib/* && npx rollup -c"
   },
   "keywords": [],
   "author": "dashu",
@@ -24,12 +26,13 @@
     "@babel/preset-env": "^7.18.9",
     "@babel/runtime": "^7.18.9",
     "@rollup/plugin-babel": "^5.3.1",
-    "rimraf": "^3.0.2",
-    "rollup": "^2.77.0",
     "@rollup/plugin-commonjs": "^22.0.1",
-    "@rollup/plugin-node-resolve": "^13.3.0"
+    "@rollup/plugin-node-resolve": "^13.3.0",
+    "rimraf": "^3.0.2",
+    "rollup": "^2.77.0"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "^7.18.9"
+    "@babel/runtime-corejs3": "^7.18.9",
+    "loadsh": "0.0.4"
   }
 }
