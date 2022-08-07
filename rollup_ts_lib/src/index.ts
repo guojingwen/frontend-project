@@ -1,6 +1,6 @@
 import EventEmmiter from "./event";
 import { Processor } from "./types";
-import {camelCase} from 'lodash';
+import _ from 'lodash';
 
 export * from './dataProcessors';
 
@@ -11,7 +11,7 @@ export default class Chat extends EventEmmiter {
     super();
     this.processors = [] as Processor[];
     console.log('es2022', [1,2,3].at(-1));
-    console.log('camelCase', camelCase('abc-xyz-nnn'));
+    console.log('camelCase', _.camelCase('abc-xyz-nnn'));
   }
   test() {
     console.log('test', this.processors);

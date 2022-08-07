@@ -30,13 +30,13 @@ export default [
       }),
       ...plugins,
     ],
-    external: ['lodash'],
   },
   {
     input,
     output: [
+			{ file: pkg.module, format: 'es' },
+      { file: 'lib/mylib.amd.js', format: 'amd' },
       { file: pkg.main, format: 'cjs' },
-			{ file: pkg.module, format: 'es' }
     ],
     plugins: [
       nodeResolve.default(),

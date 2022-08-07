@@ -36,15 +36,16 @@ export default [
         extensions,
       }),
       ...plugins,
-      terser(),
+      // terser(),
     ],
     external: ['lodash'],
   },
   {
     input,
     output: [
+			{ file: pkg.module, format: 'es', globals: {loadsh: '_'}},
+      { file: 'lib/mylib.amd.js', format: 'amd', globals: {loadsh: '_'}},
       { file: pkg.main, format: 'cjs', globals: {loadsh: '_'}},
-			{ file: pkg.module, format: 'es', globals: {loadsh: '_'}}
     ],
     plugins: [
       nodeResolve.default({
