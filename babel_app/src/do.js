@@ -1,4 +1,4 @@
-function f () {
+async function f () {
     console.log('f')
     return 2
 }
