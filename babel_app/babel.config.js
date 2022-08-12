@@ -7,7 +7,7 @@ module.exports = {
                 // 'usage' 表示按需为es6API提供垫片
                 "useBuiltIns": "usage",  
                 "corejs": {
-                    version: 3,
+                    version: "3.24",
                     proposals: true,
                 },
                 "modules": false, // 默认babel将代码转换成cjs，这里是不转换的意思
