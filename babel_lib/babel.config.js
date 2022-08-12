@@ -3,7 +3,7 @@ module.exports = {
         [
             "@babel/preset-env",
             {
-                "modules": false, // 默认babel将代码转换成cjs，这里是不转换的意思
+                "modules": false, // 默认值auto,可能根据browserslist将代码转换成cjs，这里是不转换的意思
             }
         ],
     ],
