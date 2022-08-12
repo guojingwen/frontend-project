@@ -13,7 +13,7 @@ module.exports = {
             "@babel/plugin-transform-runtime",
             {
                 corejs: {
-                    version: 3,
+                    version: "3.24",
                     proposals: true,
                 },
                 useESModules: true,
