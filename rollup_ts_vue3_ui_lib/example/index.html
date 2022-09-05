@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>rollup构建vue3 UI库</title>
+    <script src="./lib/vue.global.js"></script>
+    <link rel="stylesheet" href="./lib/element-plus/style.css">
+    <script src="./lib/element-plus/index.js"></script>
+    <script src="./index.umd.js"></script>
+</head>
+<body>
+    <div id="app">
+        <Hello></Hello>
+        <my-table></my-table>
+    </div>
+
+    <script type="module">
+    const { createApp } = Vue;
+
+    createApp({
+        components: {
+            Hello: MyVue3UI.Hello,
+            MyTable: MyVue3UI.MyTable
+        },
+        data() {
+            return {
+                message: 'Hello Vue!'
+            }
+        }
+    }).mount('#app')
+    </script>
+</body>
+</html>
