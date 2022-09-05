@@ -43,6 +43,14 @@
 - [x] 支持`cmd` `umd` `esm`
 - [x] 支持排除依赖包构建
 
+## 打包一个Vue3 UI库
+[X] 支持es6 句法
+[X] 支持es6 API
+[X] 支持TS & 自动生成声明文件
+[X] 支持cmd umd amdesm
+[X] 排除对等依赖构建（vue3 element-plus）
+[ ] scss/postcss支持
+
 ### 排除依赖包
 1. 配置babel plugin  `lodash` 应该是因为lodash不是使用esm规范所以需要babel插件
 2. 配置rollup.config.js 
