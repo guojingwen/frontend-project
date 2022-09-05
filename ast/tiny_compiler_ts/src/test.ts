@@ -92,7 +92,7 @@ traverser(ast, {
                     type: 'Identifier',
                     name: node.name!,
                 },
-                arguments: [],
+                arguments: []
             }
             node._context = expression.arguments;
             if(parent.type !== 'CallExpression') {
@@ -106,11 +106,11 @@ traverser(ast, {
     },
     NumberLiteral: {
         entry(node, parent) {
-            parent._context?.push({type: 'NumberLiteral', value: node.value})
+            parent._context?.push(node);
         }
     }
 } as Visiter/* visiter */, );
-// console.log(newAst.body[0].expression?.arguments![1])
+console.log(newAst.body[0].expression?.arguments![1])
 
 // 4. newAst --> code
 // add(2, substract(4, 2));

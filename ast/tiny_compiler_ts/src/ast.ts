@@ -66,7 +66,7 @@ export interface AstNode {
 export function parse(tokens: Token[]): Ast{
     const ast: Ast = {
         type: 'Program',
-        body: []
+        body: [],
     }
     let current = 0;
     while(current < tokens.length) {
@@ -75,20 +75,20 @@ export function parse(tokens: Token[]): Ast{
     return ast;
     function walk(): AstNode {
         let token = tokens[current];
-        if(token.type === 'paren' && token.value === '(') {
+        if(token.type === 'paren' && token.value === "(") {
             token = tokens[++current];
-            let expression: AstNode = {
+            let node: AstNode = {
                 type: 'CallExpression',
                 name: token.value,
-                params: [],
+                params: []
             }
             token = tokens[++current];
-            while(!(token.type === 'paren' && token.value === ')')) {
-                expression.params!.push(walk());
+            while(!(token.type === 'paren' && token.value === ")")) {
+                node.params!.push(walk());
                 token = tokens[current];
             }
-            current++;
-            return expression;
+            token = tokens[++current];
+            return node;
         }
         if(token.type === 'number') {
             current++;
@@ -97,7 +97,7 @@ export function parse(tokens: Token[]): Ast{
                 value: token.value,
             }
         }
-        throw new TypeError(token.type);
+        throw new TypeError(token.type)
     }
 }
 export interface NewAst {
@@ -127,33 +127,31 @@ export interface AstNode {
 }
 export interface Visiter {
     [key: string]: {
-        entry?: (node: AstNode, parent: AstNode | Ast) => void;
-        exit?: (node: AstNode, parent: AstNode | Ast) => void;
+        entry?: (node: AstNode, parent: AstNode) => void;
+        exit?: (node: AstNode, parent: AstNode) => void;
     }
 }
 export function traverser(ast: Ast, visitor: Visiter) {
-    traverserNode(ast, null);
+    traverserArray(ast.body, ast);
     return ast;
-    function traverserArray(array: AstNode[], parent: AstNode | null) {
-        array.forEach(child => traverserNode(child, parent));
-    }
-    function traverserNode(node: Ast | AstNode, parent: null | AstNode) {
+    function traverserNode(node: AstNode, parent: AstNode) {
         const methods = visitor[node.type];
-        methods?.entry?.(node, parent!);
+        methods?.entry?.(node, parent);
         switch(node.type) {
-            case 'Program': 
-                traverserArray((node as Ast).body, node);
+            case 'CallExpression':
+                traverserArray(node.params!, node);
                 break;
-            case 'CallExpression': {
-                traverserArray(node.params!, node)
+            case 'NumberLiteral':
                 break;
-            }
-            case 'NumberLiteral': 
-                break;
-            default : 
+            default:
                 throw new TypeError(node.type);
         }
-        methods?.exit?.(node, parent!);
+        methods?.exit?.(node, parent);
+    }
+    function traverserArray(array: AstNode[], parent: AstNode) {
+        array.forEach(child => {
+            traverserNode(child, parent);
+        });
     }
 }
 
@@ -161,18 +159,18 @@ export function codeGenerator(newAst: NewAst): string {
     let output = '';
     newAst.body.forEach(child => {
         output += walk(child);
-    })
+    });
     return output;
-    function walk (node: NewAstNode): string {
-        if(node.type === 'ExpressionStatement') {
-            return walk(node.expression!) + ';';
+    function walk(node: NewAstNode): string {
+        switch(node.type) {
+            case 'ExpressionStatement': 
+                return `${walk(node.expression!)};`
+            case 'CallExpression':
+                return `${node.callee!.name}(${node.arguments?.map(walk).join(', ')})`;
+            case 'NumberLiteral': 
+                return node.value!;
+            default: 
+                throw new TypeError(node.type);
         }
-        if(node.type === 'CallExpression') {
-            return `${node.callee!.name}(${node.arguments!.map(walk).join(', ')})`;
-        }
-        if(node.type === 'NumberLiteral') {
-            return node.value!;
-        }
-        throw new TypeError(node.type);
     }
 }
