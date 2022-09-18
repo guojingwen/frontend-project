@@ -1,0 +1,11 @@
+@keyframes one {
+  0% {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(359deg);
+  }
+}
+.box {
+  animation-name: one;
+}

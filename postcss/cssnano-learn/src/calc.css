@@ -1,0 +1,6 @@
+.box {
+    width: calc(2 * 100px);
+}
+.box1 {
+    width: calc(100vh - 100px);
+}

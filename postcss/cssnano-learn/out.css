@@ -1,0 +1,11 @@
+@charset "utf-8";
+
+h1:before {
+    background-position: 100% 100%;
+    background: linear-gradient(180deg, #ffe500 0, #ffe500 50%, #121 0, #121);
+    color: red;
+    font-weight: 400;
+    margin: 10px 20px;
+    min-width: auto;
+    quotes: "«""»"
+}

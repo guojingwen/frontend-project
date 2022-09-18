@@ -1,0 +1,6 @@
+.box {
+  margin: 10px 20px;
+}
+.box2 {
+  padding-bottom: env(safe-area-inset-bottom);
+}
