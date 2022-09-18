@@ -1,0 +1,30 @@
+* {
+    margin: 0;
+    padding: 0
+}
+
+.us {
+    -webkit-user-select: all;
+    user-select: all
+}
+
+html {
+    background-color: rgba(18, 52, 86, .471)
+}
+
+:root {
+    --mianColor: #ffc001
+}
+
+body {
+    color: #ffc001;
+    color: var(--mianColor);
+    font-size: 20px
+}
+
+#app {
+    background-color: green;
+    color: red;
+    font-size: 20px
+}
+/* 注： 已经被压缩，这里又格式化一，为了方便阅读理解 */

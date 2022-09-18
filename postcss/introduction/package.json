@@ -1,0 +1,21 @@
+{
+  "name": "introduction",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "npx postcss src/input.css > output.css"
+  },
+  "keywords": [],
+  "author": "dashu",
+  "license": "ISC",
+  "devDependencies": {
+    "cssnano": "^5.1.13",
+    "postcss": "^8.4.16",
+    "postcss-import": "^15.0.0",
+    "postcss-preset-env": "^7.8.2"
+  },
+  "dependencies": {
+    "postcss-cli": "^10.0.0"
+  }
+}

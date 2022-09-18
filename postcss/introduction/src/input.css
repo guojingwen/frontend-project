@@ -1,0 +1,28 @@
+/* postcss-import 合并进来 */
+@import 'reset.css';
+
+/* autoprefixer 或 postcss-preset-env */
+.us {
+    user-select: all;
+}
+
+/* postcss-preset-env 解析 cssnext 特性 */
+html {
+    background-color: #12345678;
+}
+:root{
+    --mianColor:#ffc001;
+}
+body {
+    color: var(--mianColor);
+    font-size: 20px;
+}
+
+/* cssnano 压缩删除注释选择器合并等等 */
+#app {
+    color: red;
+    background-color: green;
+}
+#app {
+    font-size: 20px;
+}
