@@ -1,0 +1,15 @@
+{
+  "name": "tapable_learn",
+  "version": "1.0.0",
+  "description": "",
+  "main": "event.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "dashu",
+  "license": "ISC",
+  "dependencies": {
+    "tapable": "^2.2.1"
+  }
+}
