@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <my-element>
+        <span slot="left">left--</span>
+        点击试试看
+    </my-element>
+    <script>
+        const template = document.createElement('template');
+        template.innerHTML = `
+        <style>
+            .bg {
+                color: blue;
+                background-color:yellow;
+                display: inline-block;
+                padding: 10px;
+            }
+        </style>
+        <div class="bg">
+            <slot name="left"></slot>
+            <button>
+                <slot></slot>    
+            </button>
+        </div>
+        `
+        class MyButton extends HTMLElement {
+            constructor(props) {
+                super();
+                this.$shadow = this.attachShadow({mode: 'open'});
+                const content = template.content.cloneNode(true);
+                this.$shadow.appendChild(content);
+            }
+        }
+        window.customElements.define('my-element', MyButton);
+
+        // wc slot 没有 vue插槽强大
+        // vue 的插槽 还支持  作用域插槽。 
+        </script>
+    <!-- <div class="bg">AAA</div> -->
+</body>
+</html>

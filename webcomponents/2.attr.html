@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <my-element content="Hello WebComponent"></my-element>
+    <script>
+        const template = document.createElement('template');
+        template.innerHTML = `
+            <style>
+                :host {
+                    color: blue;
+                    background-color:yellow;
+                }
+            </style>
+            <div>hello Webcomponent</div>
+        `;
+        class MyElement extends HTMLElement {
+            constructor() {
+                super();
+                const shadow = this.attachShadow({
+                    mode: 'open',
+                });
+                const content = template.content.cloneNode(true);
+                content.textContent = this.getAttribute('content');
+                shadow.append(content);
+            }
+        }
+        window.customElements.define('my-element', MyElement);
+
+    </script>
+</body>
+</html>

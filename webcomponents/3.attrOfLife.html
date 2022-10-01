@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <my-element id="ele" content="Hello WebComponent"></my-element>
+    <script>
+        const template = document.createElement('template');
+        template.innerHTML = `
+            <style>
+                :host {
+                    color: blue;
+                    background-color:yellow;
+                }
+            </style>
+            <div>default text</div>
+        `;
+        class MyElement extends HTMLElement {
+            constructor() {
+                super();
+                this.$shadow = this.attachShadow({
+                    mode: 'open',
+                });
+                const content = template.content.cloneNode(true);
+                this.$shadow.append(content);
+                this.render(this.$shadow)
+            }
+            static get observedAttributes() {
+                return ['content'];
+            }
+            attributeChangedCallback(name, oldValue, newVal ) {
+                console.log('attributeChangedCallback', name, newVal);
+                this[name] = newVal;
+                this.render(this.$shadow)
+            }
+            render (shadow) {
+                shadow.querySelector('div').innerText = this.content;
+            }
+        }
+        window.customElements.define('my-element', MyElement);
+
+        // 打印 attributeChangedCallback, content, Hello WebComponent
+
+        const ele = document.getElementById('ele');
+        setTimeout(() => {
+            ele.setAttribute('content', 'change attr');
+            // attributeChangedCallback content change attr 
+        }, 1000);
+
+
+    </script>
+</body>
+</html>

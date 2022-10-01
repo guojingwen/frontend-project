@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <my-button>
+        点击试试看
+    </my-button>
+    <script>
+        const btn = document.querySelector('my-button');
+        btn.addEventListener('myclick', myClick);
+        function myClick(e) {
+            console.log('receive custom event', e);
+        }
+        const template = document.createElement('template');
+        template.innerHTML = `
+        <style>
+            .bg {
+                color: blue;
+                background-color:yellow;
+                display: inline-block;
+                padding: 10px;
+            }
+        </style>
+        <div class="bg">
+            <button>
+                <slot></slot>    
+            </button>
+        </div>
+        `
+        class MyButton extends HTMLElement {
+            constructor(props) {
+                super();
+                this.$shadow = this.attachShadow({mode: 'open'});
+                const content = template.content.cloneNode(true);
+                this.$shadow.appendChild(content);
+                this.$btn = this.$shadow.querySelector('button');
+                this.$btn.addEventListener('click', () => {
+                    console.log('click');
+                    this.dispatchEvent(
+                        new CustomEvent('myclick', {
+                            detail: 'this is custom event'
+                        })
+                    );
+                })
+            }
+        }
+        window.customElements.define('my-button', MyButton);
+    </script>
+    <!-- <div class="bg">AAA</div> -->
+</body>
+</html>

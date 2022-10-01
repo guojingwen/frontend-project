@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <my-element id="ele"></my-element>
+    <script>
+        const template = document.createElement('template');
+        template.innerHTML = `
+        <style>
+            :host {
+                color: red;
+            }
+        </style>
+        <div>
+            <h2></h2>
+            <p></p>
+        </div>
+        `;
+        class MyElement extends HTMLElement {
+            constructor() {
+                super();
+                this.$shadow = this.attachShadow({mode: 'open'});
+                const content = template.content.cloneNode(true);
+                this.$shadow.appendChild(content)
+                this.render(this.$shadow);
+            }
+            render(shadow) {
+                if(!this.options) return;
+                const options = this.options || {
+                    title: 'default title',
+                    content: 'default content',
+                }
+                shadow.querySelector('h2').innerText = options.title;
+                shadow.querySelector('p').innerText = options.content;
+                shadow.querySelector('p').style.backgroundColor = options.bgColor;
+            }
+            get options () {
+                return JSON.parse(this.getAttribute('options'))
+            }
+            set options (val) {
+                this.setAttribute('options', JSON.stringify(val));
+            }
+            static get observedAttributes() {
+                return ['options']
+            }
+            attributeChangedCallback(name, oldVal, newVal) {
+                if (name === 'options') {
+                    const element =  this.$shadow.querySelector('p');
+                    this.render(this.$shadow);
+                }
+            }
+        }
+        window.customElements.define('my-element', MyElement)
+
+
+        const ele = document.getElementById('ele');
+        ele.options = {
+            title: 'hello webcomponent',
+            content: 'webcomponent is powerful',
+            bgColor: 'yellow'
+        }
+        setTimeout(() => {
+            ele.options = {
+                ...ele.options,
+                bgColor: 'blue'
+            }
+        }, 1000);
+    </script>
+</body>
+</html>

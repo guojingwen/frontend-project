@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <my-element></my-element>
+    <script>
+        const template = document.createElement('template');
+        template.innerHTML = `
+            <style>
+                :host {
+                    color: blue;
+                    background-color:yellow;
+                }
+            </style>
+            <div>hello Webcomponent</div>
+        `;
+        class MyElement extends HTMLElement {
+            constructor() {
+                super();
+                const shadow = this.attachShadow({
+                    mode: 'open',
+                }); // shadow DOM
+                const content = template.content.cloneNode(true);
+                shadow.append(content);
+
+                // 也可以不用 shadow dom 如下
+                // this.appendChild(content);
+            }
+        }
+        window.customElements.define('my-element', MyElement);
+
+    </script>
+</body>
+</html>
