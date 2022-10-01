@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100px;
+            min-width: 200px;
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <div id="box1" class="box">
+        <h2>box1</h2>
+        <my-element></my-element>
+    </div>
+    <div id="box2" class="box">
+        <h2>box2</h2>
+    </div>
+    <script>
+        const template = document.createElement('template');
+        template.innerHTML = `
+            <style>
+                :host {
+                    color: blue;
+                    background-color:yellow;
+                }
+            </style>
+            <div>hello Webcomponent</div>
+        `;
+        class MyElement extends HTMLElement {
+            constructor() {
+                super();
+                const shadow = this.attachShadow({
+                    mode: 'open',
+                });
+                const content = template.content.cloneNode(true);
+                shadow.append(content);
+            }
+            connectedCallback() {
+                console.log('connectedCallback 当自定义元素第一次被连接到文档 DOM 时被调用')
+            }
+            disconnectedCallback() {
+                console.log('disconnectedCallback 自定义元素与文档断开连接时被调用用')
+            }
+            adoptedCallback() {
+                // 比如iframe中
+                console.log('adoptedCallback 当自定义元素被移入新文档后调用')
+            }
+            attributeChangedCallback(){
+                console.log('attributeChangedCallback 当自定义元素的一个属性被增加、移除或更改时被调用')
+            }
+
+        }
+        window.customElements.define('my-element', MyElement);
+
+    </script>
+    <script>
+        var ele = document.querySelector('my-element');
+        var box1 = document.getElementById('box1');
+        box1.removeChild(ele);
+        var box2 = document.getElementById('box2');
+        box2.appendChild(ele)
+    </script>
+</body>
+</html>
