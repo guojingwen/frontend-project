@@ -1,0 +1,19 @@
+{
+  "name": "2.redux",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "dashu",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/core": "^7.19.3",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "redux": "^4.2.0",
+    "redux-thunk": "^2.4.1"
+  }
+}
