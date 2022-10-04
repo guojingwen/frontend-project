@@ -40,12 +40,13 @@
         //     </ReduxContext.Consumer>
         // }
         const connect = (mapStateToProps, mapDispatchToProps) => Comp => class Connect extends React.Component {
+            static contextType = ReduxContext;
             constructor(props) {
                 super(props);
                 // console.log('Connect', props);
             }
             componentDidMount() {
-                store.subscribe(() => this.forceUpdate());
+                this.context.subscribe(() => this.forceUpdate());
             }
             render() {
                 const {props} = this.props;
