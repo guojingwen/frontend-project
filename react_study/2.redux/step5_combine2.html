@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../node_modules/react/umd/react.development.js"></script>
+    <script src="../node_modules/react-dom/umd/react-dom.development.js"></script>
+    <script src="../node_modules/redux/dist/redux.js"></script>
+    <script src="../babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+    <script>
+    </script>
+    <script type="text/babel">
+        function counter (state = 0, action) {
+            switch(action.type) {
+                case 'ADD':
+                    return state + 1;
+                default:
+                    return state;
+            }
+        }
+        function personer (state = {name: 'zs', age: 12}, action) {
+            switch(action.type) {
+                case 'P_ADD':
+                    return Object.assign({}, state, {age: state.age + 1});
+                default:
+                    return Object.assign({}, state);
+            }
+        }
+        const store = Redux.createStore(Redux.combineReducers({counter, personer}));
+        function App() {
+            const [_state, setState] = React.useState(store.getState());
+            React.useEffect(() => {
+                store.subscribe(() => {
+                    //  函数组件没有forceUpdate所以用 state模拟更新
+                    setState(store.getState())
+                })
+                return () => {
+                    // 取消订阅
+                }
+            }, [])
+            return <div>
+                <p>{_state.counter}</p>
+                <button onClick={() => store.dispatch({type: 'ADD'})}>ADD</button>
+                <p>{_state.personer.name}今年{_state.personer.age}周岁了</p>
+                <button onClick={() => store.dispatch({type: 'P_ADD'})}>+1岁</button>
+            </div>
+        }
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App/>);
+    </script>
+</body>
+</html>
