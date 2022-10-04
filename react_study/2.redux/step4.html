@@ -96,7 +96,7 @@
             asyncAdd () {
                 store.dispatch(dispatch => {
                     setTimeout(() => {
-                        dispatch({type: 'ADD'})
+                        dispatch({type: Symbol()})
                     }, 500)
                 })
             }

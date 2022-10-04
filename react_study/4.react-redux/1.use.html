@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../node_modules/react/umd/react.development.js"></script>
+    <script src="../node_modules/react-dom/umd/react-dom.development.js"></script>
+    <script src="../node_modules/redux/dist/redux.js"></script>
+    <script src="../node_modules/react-redux/dist/react-redux.js"></script>
+    <script src="../babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        var Page = ReactRedux.connect(
+            /* mapStateToProps, */ state => ({counter: state.counter}),
+            /* mapDispatchToProps */ disptach => ({add: () => disptach({type: 'ADD'})}),
+        )(class extends React.Component {
+            render() {
+                return <div>
+                    <p>{this.props.counter}</p>
+                    <button onClick={this.props.add}>ADD</button>
+                </div>
+            }
+        })
+    </script>
+    <script type="text/babel">
+        function counter(state = 0, action) {
+            switch(action.type) {
+                case 'ADD': 
+                    return state + 1;
+                default: 
+                    return state
+            }
+        }
+        function personer(state = {name: 'zs', age: 12}, action){
+            switch(action.type) {
+                case 'P_ADD': 
+                    return Object.assign({}, state, {age: state.age + 1});
+                default: 
+                    return Object.assign({}, state);
+            }
+        }
+        const store = Redux.createStore(Redux.combineReducers({counter, personer}));
+        const {Provider} = ReactRedux;
+
+        class App extends React.Component {
+            render() {
+                return <Provider store={store}>
+                    <Page/>
+                </Provider>
+            }
+        }
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App/>);
+    </script>
+</body>
+</html>

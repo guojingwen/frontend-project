@@ -13,6 +13,19 @@
 <body>
     <div id="root"></div>
     <script>
+        function combineReducers(reducers) {
+            return function combination(state = {}, action) {
+                const keys = Object.keys(reducers);
+                const currentState = {}
+                keys.forEach((key) => {
+                    const reducer = reducers[key];
+                    const prev = state[key];
+                    const next = reducer(prev, action);
+                    currentState[key] = next;
+                });
+                return currentState;
+            }
+        }
     </script>
     <script type="text/babel">
         function counter (state = 0, action) {
@@ -31,7 +44,7 @@
                     return Object.assign({}, state);
             }
         }
-        const store = Redux.createStore(Redux.combineReducers({counter, personer}));
+        const store = Redux.createStore(combineReducers({counter, personer}));
         function App() {
             const [_state, setState] = React.useState(store.getState());
             React.useEffect(() => {
