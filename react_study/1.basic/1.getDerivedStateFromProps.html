@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../node_modules/react/umd/react.development.js"></script>
+    <script src="../node_modules/react-dom/umd/react-dom.development.js"></script>
+    <script src="../babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        class ColorPicker extends React.Component {
+            state = {
+                color: 'black'
+            }
+            static getDerivedStateFromProps (props, state) {
+                console.log('getDerivedStateFromProps', props.color, state.color)
+                if (props.color !== state.color) {
+                    return {
+                        // color: props.color
+                    }
+                }
+                return null
+            }
+            render () {
+                console.log('render');
+                return <div>
+                    <span style={{
+                        backgroundColor: this.state.color,
+                        height: '30px',
+                        width: '30px',
+                        display: 'inline-block'
+                    }}></span>
+                    <button onClick={() => this.setState({
+                        color: this.state.color === 'yellow' ? 'red' : 'yellow'
+                    })}>修改颜色</button>
+                    <hr/>
+                    {this.props.color}-{this.state.color}
+                </div>
+            }
+        }
+
+        function App() {
+            const [color, setColor] = React.useState('black');
+            return <div>
+                <button onClick={() => {
+                    setColor(color === 'black' ? 'yellow' : 'black')
+                }}>改变props颜色</button>
+                <hr/>
+                {1 && false && 1}
+                <ColorPicker color={color}></ColorPicker>
+            </div>
+        }
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App/>);
+    </script>
+</body>
+</html>

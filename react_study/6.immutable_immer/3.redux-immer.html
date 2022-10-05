@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../node_modules/react/umd/react.development.js"></script>
+    <script src="../node_modules/react-dom/umd/react-dom.development.js"></script>
+    <script src="../node_modules/redux/dist/redux.js"></script>
+    <script src="../babel.min.js"></script>
+    <script src="./node_modules/immer/dist/immer.umd.development.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        /* function reducer (state = {name: '章三', age: 12}, action) {
+            switch(action.type) {
+                case 'ADD':
+                    return Object.assign({}, state, {age: state.age + 1});
+                default: 
+                    return Object.assign({}, state);
+            }
+        } */
+        
+        function reducer (state = {name: '章三', age: 12}, action) {
+            return immer.produce(state, (draft) => {
+                switch(action.type) {
+                    case 'ADD':
+                        draft.age++;
+                        return
+                    default: 
+                        return;
+                }
+            })
+        }
+
+        const store = Redux.createStore(reducer);
+        class App extends React.Component {
+            componentDidMount() {
+                store.subscribe(() => {
+                    this.forceUpdate();
+                })
+            }
+            render() {
+                const state = store.getState();
+                return <div>
+                    <p>{state.name}今年{state.age}周岁</p>
+                    <button onClick={() => store.dispatch({type: 'ADD'})}>过生日</button>
+                </div>
+            }
+        }
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App/>);
+
+    </script>
+</body>
+</html>
