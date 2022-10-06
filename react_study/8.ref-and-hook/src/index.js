@@ -19,6 +19,7 @@ import UseEffectUsage from './hook/UseEffectUsage'
 import CustomHookUsage from './hook/CustomHookUsage';
 import UseMemoUsage from './hook/UseMemoUsage';
 import UseCallBackUsage from './hook/UseCallBackUsage';
+import UseReducerUsage from './hook/UseReducerUsage';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -35,6 +36,7 @@ root.render(
       <NavLink to='/CustomHookUsage' className={getLinkClass}>CustomHookUsage</NavLink>
       <NavLink to='/UseMemoUsage' className={getLinkClass}>UseMemoUsage</NavLink>
       <NavLink to='/UseCallBackUsage' className={getLinkClass}>UseCallBackUsage</NavLink>
+      <NavLink to='/UseReducerUsage' className={getLinkClass}>UseReducerUsage</NavLink>
       
       <Routes>
         <Route path="/RefClassUsage" element={<RefClassUsage />}></Route>
@@ -48,6 +50,7 @@ root.render(
         <Route path="/CustomHookUsage" element={<CustomHookUsage />}></Route>
         <Route path="/UseMemoUsage" element={<UseMemoUsage />}></Route>
         <Route path="/UseCallBackUsage" element={<UseCallBackUsage />}></Route>
+        <Route path="/UseReducerUsage" element={<UseReducerUsage />}></Route>
       </Routes>
     </BrowserRouter>
   </React.StrictMode>
