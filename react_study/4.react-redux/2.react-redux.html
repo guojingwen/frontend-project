@@ -97,6 +97,13 @@
         }
         const root = ReactDOM.createRoot(document.getElementById('root'));
         root.render(<App/>);
+        
+        // width: 750rpx =  100%
+        export const radio = (function(logicWidth) {
+          return logicWidth / 750
+        })(logicWidth);
+        // 750   375  
+        // 750 * radio = logicWidth
     </script>
 </body>
 </html>
