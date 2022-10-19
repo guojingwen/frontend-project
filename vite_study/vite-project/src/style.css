@@ -1,0 +1,7 @@
+:root {
+  --white: #fefae1;
+}
+body {
+  background-color: var(--white);
+  height: 100%;
+}
