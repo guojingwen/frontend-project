@@ -21,6 +21,8 @@ import UseMemoUsage from './hook/UseMemoUsage';
 import UseCallBackUsage from './hook/UseCallBackUsage';
 import UseReducerUsage from './hook/UseReducerUsage';
 
+import UseStateUsage from './hook/UseStateUsage';
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
@@ -38,6 +40,8 @@ root.render(
       <NavLink to='/UseCallBackUsage' className={getLinkClass}>UseCallBackUsage</NavLink>
       <NavLink to='/UseReducerUsage' className={getLinkClass}>UseReducerUsage</NavLink>
       
+      <NavLink to='/UseStateUsage' className={getLinkClass}>UseStateUsage</NavLink>
+
       <Routes>
         <Route path="/RefClassUsage" element={<RefClassUsage />}></Route>
         <Route path="/RefFuncUsage" element={<RefFuncUsage />}></Route>
@@ -51,6 +55,7 @@ root.render(
         <Route path="/UseMemoUsage" element={<UseMemoUsage />}></Route>
         <Route path="/UseCallBackUsage" element={<UseCallBackUsage />}></Route>
         <Route path="/UseReducerUsage" element={<UseReducerUsage />}></Route>
+        <Route path="/UseStateUsage" element={<UseStateUsage />}></Route>
       </Routes>
     </BrowserRouter>
   </React.StrictMode>
