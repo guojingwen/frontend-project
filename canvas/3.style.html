@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Canvas style</title>
+</head>
+<body>
+  <canvas id="grid"></canvas>
+  <script>
+    (() => {
+      var ctx = document.getElementById('grid').getContext('2d');
+      for (var i=0;i<6;i++){
+        for (var j=0;j<6;j++){
+          // 绘制珊格
+          // ctx.fillStyle= `rgb(${Math.floor(255-42.5*i)}, ${Math.floor(255-42.5*j)} , 0)`;
+          // ctx.fillRect(j*25, i*25, 25, 25)
+
+          // 绘制⭕️
+          // ctx.strokeStyle = `rgb(0, ${Math.floor(255-42.5*i)}, ${Math.floor(255-42.5*j)})`;
+          // ctx.beginPath();
+          // ctx.arc(12.5+j*25, 12.5+i*25, 10, 0, Math.PI*2, true);
+          // ctx.stroke();
+
+          // 绘制线条， 注意要让线条落到像素格子上
+          ctx.lineWidth = 1+i;
+          ctx.beginPath();
+          ctx.moveTo(5+i*14,5);
+          ctx.lineTo(5+i*14,140);
+          ctx.stroke();
+        }
+      }
+    })()
+  </script>
+</body>
+</html>

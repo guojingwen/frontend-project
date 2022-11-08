@@ -13,7 +13,7 @@ import React from 'react';
  */
 
 /** 属性代理页面复用案例 */
-export default function PropsProxy () {
+export default function PageReuse () {
   const [radio, setRadio] = React.useState(2)
   return <div>
     <label htmlFor="radio1">列表页面A</label>
@@ -28,11 +28,11 @@ export default function PropsProxy () {
 }
 
 const PageA = CommonPageList(
-  (props) => props.list.map(it => <p>--{it}</p>),
+  (props) => props.list.map((it, index) => <p key={index}>--{it}</p>),
   fetchListA
 );
 const PageB = CommonPageList(
-  (props) => props.list.map(it => <p>##{it}</p>),
+  (props) => props.list.map((it, index) => <p key={index}>##{it}</p>),
   fetchListB
 );
 

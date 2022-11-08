@@ -1,9 +1,3 @@
-// 属性代理 劫持渲染示例
-export default function PropsProxy() {
-  // return <Box>this is box</Box>
-  const Comp = AddBorder(Box);
-  return <Comp>this is box-</Comp>
-}
 function AddBorder(Comp) {
   return (props) => {
     return <div  style={{
@@ -14,6 +8,7 @@ function AddBorder(Comp) {
     </div>
   }
 }
+
 // @AddBorder // 装饰器写法
 function Box(props) {
   return <div style={{
@@ -25,4 +20,11 @@ function Box(props) {
     alignItems: 'center',
     justifyContent: 'center',
   }}>{props.children}</div>
+}
+
+// 属性代理 劫持渲染示例
+export default function RenderHijack(props) {
+  // return <Box>this is box</Box>
+  const Comp = AddBorder(Box);
+  return <Comp>this is box<br/>{props.children}</Comp>
 }

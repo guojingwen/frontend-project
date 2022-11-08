@@ -35,8 +35,8 @@ export default function() {
   }
   const Comp = WrapperInput(MyInput)
   return <>
-  <p>属性代理之stateless实现双向数据绑定</p>
-  <Comp type='text'></Comp>
+    <p>属性代理之stateless实现双向数据绑定</p>
+    <Comp type='text'></Comp>
   </>;
 }
 

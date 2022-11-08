@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Canvas</title>
+</head>
+<body>
+  <canvas id="triangle"></canvas>
+  <script>
+    (() => {
+      var canvas = document.getElementById('triangle');
+      var ctx = canvas.getContext('2d');
+
+       // 填充三角形
+      ctx.beginPath();
+      ctx.moveTo(25, 25);
+      ctx.lineTo(105, 25);
+      ctx.lineTo(25, 105);
+      ctx.fill();
+
+      // 描边三角形
+      ctx.beginPath();
+      ctx.moveTo(125, 125);
+      ctx.lineTo(125, 45);
+      ctx.lineTo(45, 125);
+      ctx.closePath();
+      ctx.stroke();
+    })()
+  </script>
+  <br>
+  <style>
+    #arc {
+      
+      height: 300px;
+      width: 300px;
+    }
+  </style>
+  <canvas id="arc"></canvas>
+  <script>
+    (() => {
+      var canvas = document.getElementById('arc');
+      /* Canvas 的默认大小为 300 像素 ×150 像素 */
+      canvas.height = 300
+      canvas.width = 300
+
+      ctx = canvas.getContext('2d');
+      for(var i = 0; i < 4; i++){
+        for(var j = 0; j < 3; j++){
+          ctx.beginPath();
+          var x = 25 + j * 50; // x 坐标值
+          var y = 25 + i * 50; // y 坐标值
+          var radius = 20; // 圆弧半径
+          var startAngle = 0; // 开始点
+          var endAngle = Math.PI + (Math.PI * j) / 2; // 结束点
+          var anticlockwise = i % 2 == 0 ? false : true; // 顺时针或逆时针
+
+          ctx.arc(x, y, radius, startAngle, endAngle, anticlockwise);
+
+          if (i>1){
+            ctx.fill();
+          } else {
+            ctx.stroke();
+          }
+        }
+        console.log('--')
+      }
+    })()
+  </script>
+</body>
+</html>

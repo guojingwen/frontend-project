@@ -112,17 +112,17 @@ function codeGenerator(ast) {
     return output;
     function walk(node) {
         if(node.type === 'Program') {
-            output += node.body.map(child => walk(child)).join('\n');
-            return;
+          output += node.body.map(child => walk(child)).join('\n');
+          return;
         }
         if(node.type === 'ExpressionStatement') {
-            return `${walk(node.expression)};`;
+          return `${walk(node.expression)};`;
         }
         if(node.type === 'CallExpression') {
-            return `${node.callee.name}(${node.arguments.map(walk).join(', ')})`;
+          return `${node.callee.name}(${node.arguments.map(walk).join(', ')})`;
         }
         if(node.type === 'NumberLiteral') {
-            return node.value; 
+          return node.value; 
         }
         return new TypeError(node.type);
     }
