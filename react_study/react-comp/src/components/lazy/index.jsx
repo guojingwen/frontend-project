@@ -36,7 +36,7 @@ function LazyComp (){
 }
 
 
-// 手写 Suspense 组件
+// ---------------- 手写 Suspense 组件 ----------------
 class MySuspense extends React.Component {
   state = {
     isRender: true

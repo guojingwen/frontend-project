@@ -1,5 +1,5 @@
 .active {
-  font-size: 20px;
+  font-size: 18px;
 }
 
 .link, .link:link, .link:hover, .link:active, .link:visited {
@@ -11,4 +11,9 @@
 
 #root {
   word-break: break-all;
+  font-size: 15px;
+}
+
+.ml5 {
+  margin-left: 5px;
 }
