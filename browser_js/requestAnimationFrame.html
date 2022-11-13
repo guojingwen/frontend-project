@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>requestAnimationFrame</title>
+  <style>
+    #box, #box2 {
+      height: 100px;
+      width: 100px;
+      background-color: red;
+      display: inline-block;
+    }
+  </style>
+</head>
+<body>
+  <div id="box"></div>
+  <br>
+  <div id="box2"></div>
+  <script>
+    // 这里是一个示例 无论怎样调整定时器间隔，依旧能看到定时器动画比requestAnimationFrame抖动
+    const ele = document.getElementById('box');
+    let start;
+    function step(timeStamp) {
+      start ??= timeStamp;
+      const elapsed = timeStamp - start;
+      ele.style.transform = `translateX(${Math.min(0.1*elapsed, 200)}px)`
+      if(elapsed < 2000) {
+        requestAnimationFrame(step);
+      }
+    }
+    requestAnimationFrame(step);
+
+    const ele2 = document.getElementById('box2');
+    const diff = 16.666;
+    const MAX_COUNT = 2000 / diff;
+    let count = 0;
+    console.log(MAX_COUNT);
+    const timer = setInterval(() => {
+      ++count;
+      ele2.style.transform = `translateX(${200*count/MAX_COUNT}px)`
+      if(count > MAX_COUNT) {
+        clearInterval(timer);
+      }
+    }, diff);
+  </script>
+</body>
+</html>
