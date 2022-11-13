@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../node_modules/react/umd/react.development.js"></script>
+    <script src="../node_modules/react-dom/umd/react-dom.development.js"></script>
+    <script src="../node_modules/redux/dist/redux.js"></script>
+    <script src="../node_modules/redux-thunk/dist/redux-thunk.js"></script>
+    <script src="../babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+      function App () {
+        const [radio, setRadio] = React.useState(2)
+        return <div>
+          <label htmlFor="radio1">页面A</label>
+          <input id="radio1" type="radio" value={1} checked={radio === 1}
+            onChange={() => setRadio(1)}/>
+          <label htmlFor="radio2">页面B</label>
+          <input id="radio2" type="radio" value={2} checked={radio === 2}
+            onChange={() => setRadio(2)}/>
+          {/* <br /> */}
+          {radio === 1 ? <PageA/> : <PageB/>}
+        </div>
+      }
+      const root = ReactDOM.createRoot(document.getElementById('root'));
+      root.render(<App/>);
+      // --
+      function PageA() {
+        return <ExposureDisappear
+          exposure={e => console.log('上报A页面曝光')}
+          disappear={e => console.log('上报A页面消失')}>
+          <h2>页面A</h2>
+        </ExposureDisappear>
+      }
+      function PageB() {
+        return <h2>页面B</h2>
+      }
+      /* class ExposureDisappear extends React.Component {
+        constructor(props) {
+          super(props);
+          this.id = `${Date.now()}-${Number.parseInt(Math.random() * 1000)}`;
+        }
+        componentDidMount() {
+          this.el = document.getElementById(this.id);
+          this.observer = new IntersectionObserver(([inst]) => {
+            if(inst.intersectionRatio === 0) {
+              this.props?.disappear();
+            } else {
+              this.props?.exposure();
+            }
+          }, {
+            root: document.documentElement,
+            rootMargin: '0px',
+            threshold: [0] // 目标元素与根元素相交程度触发cb - [0 - 1]
+          });
+          this.observer.observe(this.el);
+          document.addEventListener('visibilitychange', this.visibilitychange);
+        }
+        visibilitychange = ()=> {
+          setTimeout(() => {
+            if(document.hidden) {
+              this.el.setAttribute('style', 'display: none');
+            } else {
+              this.el.setAttribute('style', '');
+            }
+          }, 20)
+        }
+        componentWillUnmount() {
+          this.observer?.disconnect();
+          this.props?.disappear();
+          document.removeEventListener('visibilitychange', this.visibilitychange);
+        }
+        render() {
+          return <div id={this.id}>
+            {this.props.children}
+          </div>;
+        }
+      } */
+      function ExposureDisappear (props) {
+        const id = Date.now() + '';
+        React.useEffect(() => {
+          const el = document.getElementById(id);
+          const visibilitychange = () => {
+            setTimeout(() => {
+              if(document.hidden) {
+                el.setAttribute('style', 'display: none');
+              } else {
+                el.setAttribute('style', '');
+              }
+            }, 20)
+          }
+          const observer = new IntersectionObserver(([inst]) => {
+            if(inst.intersectionRatio === 0) {
+              props?.disappear();
+            } else {
+              props?.exposure();
+            }
+          }, {
+            root: document.documentElement,
+            rootMargin: '0px',
+            threshold: [0] // 目标元素与根元素相交程度触发cb - [0 - 1]
+          });
+          observer.observe(el);
+          document.addEventListener('visibilitychange', visibilitychange);
+          return () => {
+            observer?.disconnect();
+            props?.disappear();
+            document.removeEventListener('visibilitychange', visibilitychange);
+          }
+        }, []);
+        return <div id={id}>
+          {props.children}
+        </div>
+      }
+    </script>
+</body>
+</html>

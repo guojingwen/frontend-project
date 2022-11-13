@@ -1,8 +1,11 @@
-.active {
-  font-size: 18px;
-}
-
 .link, .link:link, .link:hover, .link:active, .link:visited {
+  color: #2222f3a5;
+}
+.link:hover, .link:active {
+  color: #2222f3;
+}
+.link.active {
+  font-size: 18px;
   color: #2222f3;
 }
 .link:not(:nth-of-type(1)){
