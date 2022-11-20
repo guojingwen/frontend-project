@@ -22,9 +22,9 @@ function PermissionControl(Comp) {
     if(state.isRequesting) return <p>页面加载中...</p>
     return state.hasPermission ? <Comp {...props}/> : <h2>您访问的页面不存在</h2>
   }
-  
 }
   
+// 符合设计模式思想 职责单一
 export default PermissionControl(Comp);
 
 function Comp(props) {

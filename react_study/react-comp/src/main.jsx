@@ -15,7 +15,7 @@ import PerformanceMonitoring from './components/reverseExtends/PerformanceMonito
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <h2>React组件化技术</h2>
+    <h2>React组件化技术之高阶函数</h2>
     <BrowserRouter>
       <fieldset>
         <legend>属性代理</legend>
@@ -44,9 +44,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       <hr />
       <Routes>
         <Route path="/PageReuse" element={<PageReuse/>}></Route>
-        <Route path='/RenderHijack' element={<RenderHijack>RenderHijack slot</RenderHijack>}></Route>
+        <Route path='/RenderHijack' element={<RenderHijack>This is box</RenderHijack>}></Route>
         <Route path='/Permission' element={<Permission>张三</Permission>}></Route>
-        <Route path='/PerformanceMonitoring' element={<PerformanceMonitoring/>}></Route>
+        <Route path='/PerformanceMonitoring' element={<PerformanceMonitoring count={30}/>}></Route>
         <Route path='/Lazy' element={<Lazy/>}></Route>
         <Route path='/ErrorBoundary' element={<ErrorBoundary/>}></Route>
         <Route path='/FuncRefush' element={<FuncRefush/>}></Route>

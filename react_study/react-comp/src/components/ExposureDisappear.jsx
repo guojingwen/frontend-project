@@ -1,5 +1,6 @@
 import React from 'react';
 
+// 组件复合  类比vue slot分发
 export default function () {
   return <ExposureDisappear className="container"
   exposure={e => console.log('上报A页面曝光')}
@@ -37,13 +38,13 @@ class ExposureDisappear extends React.Component {
     document.addEventListener('visibilitychange', this.visibilitychange);
   }
   visibilitychange = ()=> {
-    setTimeout(() => {
+    requestIdleCallback(() => {
       if(document.hidden) {
         this.el.setAttribute('style', 'display: none');
       } else {
         this.el.setAttribute('style', '');
       }
-    }, 20)
+    });
   }
   componentWillUnmount() {
     this.observer?.disconnect();

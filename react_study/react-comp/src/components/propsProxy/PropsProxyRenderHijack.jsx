@@ -26,5 +26,5 @@ function Box(props) {
 export default function RenderHijack(props) {
   // return <Box>this is box</Box>
   const Comp = AddBorder(Box);
-  return <Comp>this is box<br/>{props.children}</Comp>
+  return <Comp>这是渲染劫持插入的内容<br/>{props.children}</Comp>
 }

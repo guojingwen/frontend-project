@@ -8,7 +8,7 @@
  */
 import React from 'react';
 
-//  class组件反向继承 实现性能上报
+// class组件反向继承 实现性能上报
 function PerformanceMonitoring (Comp) {
   return class extends Comp {
     state = {
@@ -39,7 +39,7 @@ class HeavyComp extends React.Component {
     super(props);
   }
   static getDerivedStateFromProps(props, state) {
-    const total = Fibonacci(props.count ?? 35);
+    const total = Fibonacci(props.count ?? 36);
     return {
       total
     }
@@ -48,6 +48,9 @@ class HeavyComp extends React.Component {
     return <h2> Fibonacci (n)  = {this.state.total}</h2>
   }
 }
+// 符合设计模式里氏替换的思想，
+// 任何基类（父类）出现的地方，子类都可以出现出现
+// 基类HeavyComp 子类PerformanceMonitoring(HeavyComp)
 export default PerformanceMonitoring(HeavyComp);
 
 // function组件 反向继承
