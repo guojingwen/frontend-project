@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <h2>内存溢出导致webview闪退</h2>
+  <button id="start">触发内存溢出</button>
+  <script>
+    var obj;
+    document.getElementById('start').addEventListener('click', function() {
+      obj = {}
+      for(let i = 0; i < 1000; i++) {
+        obj[i] = new Array(1000000);
+        console.log('------')
+      }
+    })
+  </script>
+</body>
+</html>
