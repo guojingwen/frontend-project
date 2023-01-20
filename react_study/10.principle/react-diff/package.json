@@ -1,0 +1,16 @@
+{
+  "name": "react-diff",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "vitest",
+    "coverage": "vitest run --coverage"
+  },
+  "keywords": [],
+  "author": "dashu",
+  "license": "ISC",
+  "devDependencies": {
+    "vitest": "^0.27.2"
+  }
+}

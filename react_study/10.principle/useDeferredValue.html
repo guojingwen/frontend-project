@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="../node_modules/react/umd/react.development.js"></script>
+  <script src="../node_modules/react-dom/umd/react-dom.development.js"></script>
+  <script src="../babel.min.js"></script>
+</head>
+
+<body>
+  <div id="root"></div>
+  <script>
+    // abcd -> dbac
+    // li = 0  
+
+    // acdb
+
+    // cdba
+    // 
+    const randomNum = () => {
+      return new Promise(resolve => setTimeout(() => resolve(Math.random()), 5000));
+    };
+
+    const wrapPromise = promise => {
+      let status = "pending";
+      let result = "";
+      let suspense = promise.then(
+        r => {
+          status = "success";
+          result = r;
+        },
+        e => {
+          status = "error";
+          result = e;
+        }
+      );
+
+      return {
+        read() {
+          if (status === "pending") {
+            throw suspense;
+          } else if (status === "error") {
+            throw result;
+          }
+          return result;
+        }
+      };
+    };
+
+    const createResource = () => {
+      return {
+        num: wrapPromise(randomNum())
+      };
+    };
+
+  </script>
+  <script type="text/babel">
+    function App() {
+      return <h2>useDeferredValue</h2>;
+    }
+
+    import createResource from "./RandomNum";
+
+    const Num = ({ resource }) => {
+      const num = resource.num.read();
+      return <div>{num}</div>;
+    };
+
+    const init = createResource();
+    const init2 = createResource();
+
+    function App() {
+      const [resource, setResource] = useState(init);
+      const deferredResource = useDeferredValue(resource, { timeoutMs: 2500 });
+      const isStale = deferredResource !== resource;
+
+      const [resource2, setResource2] = useState(init2);
+
+      const refresh = () => {
+        setResource(createResource());
+      };
+
+      const refresh2 = () => {
+        setResource2(createResource());
+      };
+
+      return (
+        <div className="App">
+          <div id="test" style={{ border: "1px solid", margin: "10px" }}>
+            <Suspense fallback={<Spinner animation="border" />}>
+              <div style={{ color: isStale ? "pink" : "black" }}>
+                <Num resource={deferredResource} />
+              </div>
+            </Suspense>
+            <div>
+              <Button style={{ margin: "10px" }} onClick={refresh}>
+                Refresh (useDeferredValue)
+              </Button>
+            </div>
+          </div>
+          <div style={{ border: "1px solid", margin: "10px" }}>
+            <Suspense fallback={<Spinner animation="grow" />}>
+              <div>
+                <Num resource={resource2} />
+              </div>
+            </Suspense>
+            <div>
+              <Button style={{ margin: "10px" }} onClick={refresh2}>
+                Refresh
+              </Button>
+            </div>
+          </div>
+        </div>
+      );
+    }
+    ReactDOM.createRoot(document.getElementById('root'))
+    .render(<App />);
+  </script>
+</body>
+
+</html>

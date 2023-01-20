@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script type="module">
+    import { mount, reactive } from './vue3.mjs';
+
+    const App = {
+      $data: null,
+      setup() {
+        const time = reactive({
+          seconds: 0,
+        });
+        setInterval(() => {
+          +time.seconds
+        }, 1000)
+        return {
+          time
+        }
+      },
+      render() {
+        return `<p>${this.time.seconds}</p>`
+      }
+    }
+    mount(App, document.getElementById('root'))
+  </script>
+</body>
+</html>

@@ -9,14 +9,14 @@
 import React, {lazy, Suspense} from 'react';
 import { useEffect } from 'react';
  
-const About = lazy(() => import(/* webpackChunkName:'about' */ './About'));
-// const About = lazy(
-//   () => new Promise(resolve => {
-//     setTimeout(() => {
-//       resolve(import(/* webpackChunkName:'about' */ './About'))
-//     }, 500);
-//   })
-// );
+// const About = lazy(() => import(/* webpackChunkName:'about' */ './About'));
+const About = lazy(
+  () => new Promise(resolve => {
+    setTimeout(() => {
+      resolve(import(/* webpackChunkName:'about' */ './About'))
+    }, 2000);
+  })
+);
 export default function (){
   const [hasLoad, setHasLoad] = React.useState(false);
   return hasLoad ? <LazyComp/> : 

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="module">
+    import Didact from './my-react.js';
+    // import Didact from '../step3/my-react.js';
+    function App(props) {
+      const [state, setState] = Didact.useState(0);
+      return Didact.createElement(
+        'h2',
+        {
+          onClick: () => setState(c => c+1),
+        },
+        `Hello ${props.name}: --${state}`
+      )
+    }
+    const element = Didact.createElement(
+      App,
+      {name: '章三'}
+    );
+    Didact.render(element, document.getElementById('root'));
+  </script>
+</body>
+</html>

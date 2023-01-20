@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="module">
+    import Didact from './my-react.js';
+    // import Didact from '../demo/my-react.js';
+
+    function App (props) {
+      return Didact.createElement(
+        'h2',
+        {
+          style: 'color: red;'
+        },
+        `Hello ${props.name}`,
+      )
+    }
+    const element = Didact.createElement(App, {name: 'zs'});
+    Didact.render(element, document.getElementById('root'))
+  </script>
+</body>
+</html>

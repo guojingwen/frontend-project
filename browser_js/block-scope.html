@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    var scope = "global scope";
+    function checkscope(){
+      var _scope = "local scope";
+      function f(){
+        return scope;
+      }
+      return f();
+    }
+    checkscope();
+    // window.performance.timing
+    navigatorStart
+    unloadStart
+    unloadEnd
+    redirectStart
+    redirectEnd
+
+    // 用户输入阶段
+    // 准备解析阶段
+    domainLookupStart
+    domainLookupEnd
+    connectStart
+    connectEnd
+    secureConnectionStart
+    requestStart
+    requestEnd
+
+    // 提交文档开始渲染
+    domLoading
+    domInteractive
+    domLoadEventStart / domLoadEventEnd
+    readyStateChange
+    domComplete
+    loadEventStart / loadEventEnd
+
+    // 渲染
+    dom解析 css解析
+    样式从计算
+    layout  renderTree
+
+    paint 
+      - 创建绘制列表
+      - 填充像素  光栅化  主线程到合成线程
+      - 珊格化（生成位图）合成线程对图层分块，优先计算视口附近的图块
+      - GPU珊格化
+      - 合成线程将绘制图片的命令交给浏览器进程
+    componsition
+    
+    - 重绘
+    - 回流
+
+
+
+
+
+    - 用户输入
+    - 准备渲染阶段
+    - 提交文档
+    -
+
+
+  </script>
+</body>
+</html>

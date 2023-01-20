@@ -33,5 +33,24 @@
     }
     mount(App, document.getElementById('root'));
   </script>
+  <script type="module">
+    import {mount, reactive} from './vue3.mjs';
+    const App = {
+      $data: null,
+      setup() {
+        const time = reactive({
+          seconds: 0,
+        });
+        setInterval(() => {
+          ++time.seconds
+        }, 1000)
+        return {
+          time,
+        }
+      },
+      render
+    }
+    mount(App, document.getElementById('el'))
+  </script>
 </body>
 </html>

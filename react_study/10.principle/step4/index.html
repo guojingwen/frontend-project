@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="module">
+    // import Didact from '../demo/my-react.js';
+    import Didact from './my-react.js';
+
+    /** @jsx Didact.createElement */
+function Counter() {
+  const [state, setState] = Didact.useState(1);
+  return Didact.createElement("h1", {
+    onClick: () => setState(c => c + 1),
+    style: "user-select: none"
+  }, "Count: ", state);
+}
+    
+    function App(props) {
+      const [state, setState] = Didact.useState(0);
+      return Didact.createElement(
+        'h1',
+        {
+          onClick: () => setState(c => c+1)
+        },
+        `Hello ${props.name} - ${state}`,
+        state,
+      )
+    }
+    const element = Didact.createElement(App, {name: '里斯'});
+
+    Didact.render(element, document.getElementById('root'));
+  </script>
+</body>
+</html>

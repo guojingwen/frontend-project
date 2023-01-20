@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../node_modules/react/umd/react.development.js"></script>
+    <script src="../node_modules/react-dom/umd/react-dom.development.js"></script>
+    <script src="../babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+      class App extends React.Component {
+        state = {
+          arr: [0]
+        }
+        
+        addInput= ()=> {
+          const {arr} = this.state;
+          this.setState({
+            arr: [...arr, arr.length]
+          })
+        }
+        
+        render() {
+          return <div>
+            <h2>往输入框输入一些内容</h2>
+            <button onClick={this.addInput}>添加一个输入框</button>
+            {
+              this.state.arr.map(item => {
+                return <input key={item} type="text" />
+              })
+            }
+          </div>
+        }
+      }
+  
+      const root = ReactDOM.createRoot(document.getElementById('root'));
+      root.render(<App/>);
+    </script>
+</body>
+</html>

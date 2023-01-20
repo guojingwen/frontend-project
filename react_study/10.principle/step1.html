@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="../node_modules/react/umd/react.development.js"></script>
+  <script src="../node_modules/react-dom/umd/react-dom.development.js"></script>
+  <script src="../babel.min.js"></script>
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    function App() {
+      const len = 3000;
+      return (
+        <ul>
+          {Array(len).fill(0).map((_, i) => <li key={i}>{i}</li>)}
+        </ul>
+      );
+    }
+    const rootEl = document.getElementById('root');
+    const root = ReactDOM.createRoot(rootEl);
+    // const root = ReactDOM.unstable_createRoot(rootEl);
+
+    root.render(<App />);
+  </script>
+</body>
+
+</html>

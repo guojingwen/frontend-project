@@ -44,9 +44,9 @@ import {flushSync} from 'react-dom'
 handleClick = () => {
   setTimeout(() => {
     this.setState(({ count }) => ({ count: count + 1 }));
- 		// V18前 { count: 1, flag: false }
-    // V18中 { count: 0, flag: false }，除非使用flushSync
     console.log(this.state);
+    // V18前 { count: 1, flag: false }
+    // V18中 { count: 0, flag: false }，除非使用flushSync
 
     this.setState(({ flag }) => ({ flag: !flag }));
   });

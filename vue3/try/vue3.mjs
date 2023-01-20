@@ -1,4 +1,4 @@
-export function mount(instance, el) {
+ export function mount(instance, el) {
   effect(() => {
     instance.$data && update(el, instance);
   })
@@ -64,7 +64,7 @@ function effect(fn) {
       // 4. 执行结束，出栈
       // 为什么可以出栈，因为上一步执行fn()的时候
       // 触发了get() ==> 调用了track  完成依赖收集
-      effectStack.push();
+      effectStack.pop();
     }
   }
   rxEffect();

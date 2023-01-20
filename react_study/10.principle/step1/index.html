@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="module">
+    import Didact from './my-react.js';
+
+    /** @jsx Didact.createElement */
+    /*
+      <div>
+        <input onInput={updateValue} value={value} />
+        <h2>Hello {value}</h2>
+      </div>
+    */
+    function updateValue (e) {
+      render(e.target.value);
+    }
+    function render(value) {
+      const element = Didact.createElement(
+        'div',
+        {},
+        Didact.createElement('input', {
+          onInput: updateValue,
+          value: value,
+        }),
+        Didact.createElement('h2', {}, 'Hello ' + value),
+      )
+      Didact.render(
+        element,
+        document.getElementById('root'),
+      )
+    }
+    // render('World');
+  </script>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../node_modules/react/umd/react.development.js"></script>
+    <script src="../node_modules/react-dom/umd/react-dom.development.js"></script>
+    <script src="../babel.min.js"></script>
+    <style>
+      .chat {
+        height: 150px;
+        width: 200px;
+        background-color: #ccc;
+        overflow-y: scroll;
+      }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+      // 该案例请使用safari浏览器演示
+      // chrome渲染过程中做了优化，修改了scrollTop
+      class Chat extends React.Component {
+        state = {
+          news: []
+        }
+        componentDidMount() {
+          this.timer = setInterval(() => {
+            const news = this.state.news;
+            this.setState({
+              news: ['新闻' + (news.length + 1), ...news]
+            });
+          }, 1000)
+        }
+        getSnapshotBeforeUpdate() {
+          return this.refs.chat.scrollHeight;
+        }
+        componentDidUpdate(prevProps, prevState, snapshot) {
+          window._this = this;
+          const diff= this.refs.chat.scrollHeight - snapshot
+          console.log(this.refs.chat.scrollTop, diff);
+          this.refs.chat.scrollTop += diff;
+        }
+        render() {
+          return <div ref="chat" className="chat">
+            {
+              this.state.news.map(item => {
+                return <div key={item}>{item}</div>
+              })
+            }
+          </div>
+        }
+      }
+  
+      const root = ReactDOM.createRoot(document.getElementById('root'));
+      root.render(<Chat/>);
+    </script>
+</body>
+</html>

@@ -3,13 +3,13 @@
  * 2. tokens --> ast
  * 3. ast  --> newAst
  * 4. newAst --> code
- * // Literal Identifier Statement Expression 
+ * // Literal Identifier Statement Expression
  */
- import { tokenizer, parse, traverser, codeGenerator } from './ast';
- 
- const input = `(add 2 (substract 4 2))`;
- // 1. string --> tokens
- /* [
+import { tokenizer, parse, traverser, codeGenerator } from "./ast";
+
+const input = `(add 2 (substract 4 2))`;
+// 1. string --> tokens
+/* [
      {type: 'paren', value: '('},
      {type: 'name', value: 'add'},
      {type: 'number', value: '2'},
@@ -20,10 +20,10 @@
      {type: 'paren', value: ')'},
      {type: 'paren', value: ')'},
  ] */
- const tokens = tokenizer(input);
- 
- // 2. tokens --> ast
- /* {
+const tokens = tokenizer(input);
+
+// 2. tokens --> ast
+/* {
      type: 'Program',
      body: [
          {
@@ -43,10 +43,10 @@
          }
      ]
  } */
- const ast = parse(tokens);
- 
- // 3. ast -> newAst
- /* var myNewAst = {
+const ast = parse(tokens);
+
+// 3. ast -> newAst
+/* var myNewAst = {
      type: 'Program',
      body: [
          {
@@ -75,25 +75,28 @@
          }
      ]
  } */
- const newAst = {
-     type: 'Program',
-     body: []
- }
- ast._context = newAst.body;
- traverser(ast, {
-     CallExpression: {
-         entry(node: any, parent: any){
-             // ...
-         }
-     },
-     NumberLiteral: {
-         entry(node: any, parent: any) {
-            // ... 同上
-         }
-     }
- }/* visiter */, );
- 
- // 4. newAst --> code
- // add(2, substract(4, 2));
- const output = codeGenerator(newAst);
- console.log('output', output);
+const newAst = {
+	type: "Program",
+	body: [],
+};
+ast._context = newAst.body;
+traverser(
+	ast,
+	{
+		CallExpression: {
+			entry(node: any, parent: any) {
+				// ...
+			},
+		},
+		NumberLiteral: {
+			entry(node: any, parent: any) {
+				// ... 同上
+			},
+		},
+	} /* visiter */
+);
+
+// 4. newAst --> code
+// add(2, substract(4, 2));
+const output = codeGenerator(newAst);
+console.log("output", output);
