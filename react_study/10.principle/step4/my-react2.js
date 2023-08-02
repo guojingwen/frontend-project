@@ -215,19 +215,19 @@ function useState(initial) {
     }
 ​
     const actions = oldHook ? oldHook.queue : []
-    actions.forEach(action => {
-    hook.state = action(hook.state)
+			actions.forEach(action => {
+			hook.state = action(hook.state)
     })
 ​
     const setState = action => {
-    hook.queue.push(action)
-    wipRoot = {
-        dom: currentRoot.dom,
-        props: currentRoot.props,
-        alternate: currentRoot,
-    }
-    nextUnitOfWork = wipRoot
-    deletions = []
+			hook.queue.push(action)
+			wipRoot = {
+					dom: currentRoot.dom,
+					props: currentRoot.props,
+					alternate: currentRoot,
+			}
+			nextUnitOfWork = wipRoot
+			deletions = []
     }
 ​
     wipFiber.hooks.push(hook)

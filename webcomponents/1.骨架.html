@@ -12,6 +12,7 @@
         const template = document.createElement('template');
         template.innerHTML = `
             <style>
+								/* :host 宿主元素 及组件容器样式 */
                 :host {
                     color: blue;
                     background-color:yellow;
@@ -20,19 +21,24 @@
             <div>hello Webcomponent</div>
         `;
         class MyElement extends HTMLElement {
-            constructor() {
+					constructor() {
                 super();
                 const shadow = this.attachShadow({
                     mode: 'open',
-                }); // shadow DOM
+                }); // shadow DOM   样式是隔离的
                 const content = template.content.cloneNode(true);
                 shadow.append(content);
 
                 // 也可以不用 shadow dom 如下
                 // this.appendChild(content);
-            }
-        }
+					}
+				}
         window.customElements.define('my-element', MyElement);
+
+				// 获取
+				const el = customElements.get('my-element');
+				const inst = new el();
+				document.body.appendChild(inst);
 
     </script>
 </body>

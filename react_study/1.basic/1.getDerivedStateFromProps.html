@@ -25,6 +25,11 @@
                 }
                 return null
             }
+						changeColor = () => {
+							this.setState({
+									color: this.state.color === 'yellow' ? 'red' : 'yellow'
+							})
+						}
             render () {
                 console.log('render');
                 return <div>
@@ -34,9 +39,7 @@
                         width: '30px',
                         display: 'inline-block'
                     }}></span>
-                    <button onClick={() => this.setState({
-                        color: this.state.color === 'yellow' ? 'red' : 'yellow'
-                    })}>修改颜色</button>
+                    <button onClick={this.changeColor}>修改颜色</button>
                     <hr/>
                     {this.props.color}-{this.state.color}
                 </div>
@@ -45,14 +48,15 @@
 
         function App() {
             const [color, setColor] = React.useState('black');
-            return <div>
-                <button onClick={() => {
-                    setColor(color === 'black' ? 'yellow' : 'black')
-                }}>改变props颜色</button>
+						const changeColor = () => {
+							setColor(color === 'black' ? 'yellow' : 'black')
+						}
+            return (<div>
+                <button onClick={changeColor}>改变props颜色</button>
                 <hr/>
                 {1 && false && 1}
                 <ColorPicker color={color}></ColorPicker>
-            </div>
+            </div>)
         }
         const root = ReactDOM.createRoot(document.getElementById('root'));
         root.render(<App/>);

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	<script src="./vue.dev.js"></script>
+</head>
+<body>
+	<div id="app">
+		<p>{{message}}</p>
+		<li v-for="todo in todos" :class="todo.className">
+      {{ todo.text }}
+    </li>
+	</div>
+	<script>
+		var app = new Vue({
+			el: '#app',
+			data: {
+				message: 'Hello Vue!',
+				todos: [
+					{ text: '学习 JavaScript', className: 'aaa' },
+					{ text: '学习 Vue' },
+					{ text: '整个牛项目' }
+				]
+
+			},
+			async created() {
+				console.log('created');
+				console.log(this.$el?.querySelector('.aaa'));
+				await this.$nextTick();
+				console.log(this.$el.querySelector('.aaa'));
+			}
+		})
+	</script>
+</body>
+</html>

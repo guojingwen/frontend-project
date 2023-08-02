@@ -163,7 +163,6 @@ function performUnitOfWork(fiber) {
 
 let wipFiber = null;
 let hookIndex = null;
-
 function updateFunctionComponent(fiber) {
   wipFiber = fiber;
   hookIndex = 0;

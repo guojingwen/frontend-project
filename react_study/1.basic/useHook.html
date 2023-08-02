@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../node_modules/react/umd/react.development.js"></script>
+    <script src="../node_modules/react-dom/umd/react-dom.development.js"></script>
+    <script src="../babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+				function useCountDown(initail) {
+					let [time, setTime] = React.useState(initail);
+					let timer;
+					React.useEffect(() => {
+						clearInterval(timer);
+						time = initail;
+						timer = setInterval(() => {
+							--time;
+							setTime(time);
+							console.log(time);
+							if(time === 0) {
+								clearInterval(timer);
+							}
+						}, 1000);
+						return () => {
+							clearInterval(timer);
+						}
+					}, [initail])
+					return time;
+				}
+        function App() {
+						const [num, setNum] = React.useState(10);
+						const onInput = (e) => {
+							setNum(+e.target.value);
+						}
+            return <div>
+                <input type="number" value={num} onInput={onInput}/>
+								<CountDown time={num}/>
+            </div>
+        }
+				function CountDown(props) {
+					const time = useCountDown(props.time);
+					return <div>
+							{time}
+					</div>
+				}
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App time={10}/>);
+    </script>
+</body>
+</html>

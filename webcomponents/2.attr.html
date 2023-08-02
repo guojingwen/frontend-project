@@ -25,13 +25,14 @@
                 const shadow = this.attachShadow({
                     mode: 'open',
                 });
+								// mode 有 'open'和 'closed'两个值
+								// mode: 'open' JS通过 element.shadowRoot 属性来访问修改Shadow DOM内部结构的。
                 const content = template.content.cloneNode(true);
                 content.textContent = this.getAttribute('content');
                 shadow.append(content);
             }
         }
         window.customElements.define('my-element', MyElement);
-
     </script>
 </body>
 </html>

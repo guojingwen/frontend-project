@@ -27,6 +27,7 @@ function createDom(fiber) {
     document.createTextNode('') :
     document.createElement(fiber.type);
   updateDom(dom, {}, fiber.props);
+	fiber.dom = dom;
   return dom;
 }
 
@@ -75,11 +76,11 @@ function commitRoot() {
 function commitWork(fiber) {
   if(!fiber) return;
   const domParent = fiber.parent.dom;
-  if(fiber.effectTag === 'PLACEMENT' && fiber.dom) {
-    domParent.appendChild(fiber.dom);
-  } else if(fiber.effectTag === 'UPDATE' && fiber.dom) {
+  if(fiber.effectTag === 'UPDATE' && fiber.dom) {
     updateDom(fiber.dom, fiber.alternate.props, fiber.props);
-  } else if(fiber.effectTag === 'DELETION') {
+  } else if(fiber.effectTag === 'PLACEMENT' && fiber.dom) {
+    domParent.appendChild(fiber.dom);
+  } else if(fiber.effectTag === 'DELETION' && fiber.dom) {
     domParent.removeChild(fiber.dom);
   }
   commitWork(fiber.child);
@@ -94,8 +95,8 @@ function render(element, container) {
     },
     alternate: currentRoot,
   }
-  deletions = [];
   nextUnitOfWork = wipRoot;
+  deletions = [];
 }
 
 let wipRoot = null;
