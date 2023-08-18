@@ -960,7 +960,7 @@
 	var _atInstanceProperty = /*@__PURE__*/getDefaultExportFromCjs(at$7.exports);
 
 	var script$1 = vue.defineComponent({
-	  setup: function setup() {
+	  setup() {
 	    var arr = [1, 2, 3, 4];
 
 	    var last = _atInstanceProperty(arr).call(arr, -1);
@@ -968,9 +968,10 @@
 	    console.log(last);
 	    var msg = vue.ref('');
 	    return {
-	      msg: msg
+	      msg
 	    };
 	  }
+
 	});
 
 	var _hoisted_1$1 = /*#__PURE__*/vue.createElementVNode("h2", null, "compiler vue3 components by rollup", -1
@@ -999,7 +1000,8 @@
 	    ElTable: elementPlus.ElTable,
 	    ElTableColumn: elementPlus.ElTableColumn
 	  },
-	  setup: function setup() {
+
+	  setup() {
 	    return {
 	      tableData: [{
 	        id: 1,
@@ -1012,17 +1014,25 @@
 	      }]
 	    };
 	  }
+
 	});
 
 	var _hoisted_1 = {
 	  class: "my-table"
 	};
+
+	var _hoisted_2 = /*#__PURE__*/vue.createElementVNode("p", {
+	  class: "test"
+	}, "AAA", -1
+	/* HOISTED */
+	);
+
 	function render(_ctx, _cache, $props, $setup, $data, $options) {
 	  var _component_el_table_column = vue.resolveComponent("el-table-column");
 
 	  var _component_el_table = vue.resolveComponent("el-table");
 
-	  return vue.openBlock(), vue.createElementBlock("div", _hoisted_1, [vue.createVNode(_component_el_table, {
+	  return vue.openBlock(), vue.createElementBlock("div", _hoisted_1, [_hoisted_2, vue.createVNode(_component_el_table, {
 	    data: _ctx.tableData,
 	    border: ""
 	  }, {
@@ -1046,17 +1056,35 @@
 	  , ["data"])]);
 	}
 
-	var e=[],t=[];function n(n,r){if(n&&"undefined"!=typeof document){var a,s=!0===r.prepend?"prepend":"append",d=!0===r.singleTag,i="string"==typeof r.container?document.querySelector(r.container):document.getElementsByTagName("head")[0];if(d){var u=e.indexOf(i);-1===u&&(u=e.push(i)-1,t[u]={}),a=t[u]&&t[u][s]?t[u][s]:t[u][s]=c();}else a=c();65279===n.charCodeAt(0)&&(n=n.substring(1)),a.styleSheet?a.styleSheet.cssText+=n:a.appendChild(document.createTextNode(n));}function c(){var e=document.createElement("style");if(e.setAttribute("type","text/css"),r.attributes)for(var t=Object.keys(r.attributes),n=0;n<t.length;n++)e.setAttribute(t[n],r.attributes[t[n]]);var a="prepend"===s?"afterbegin":"beforeend";return i.insertAdjacentElement(a,e),e}}
+	function styleInject(css, ref) {
+	  if ( ref === void 0 ) ref = {};
+	  var insertAt = ref.insertAt;
 
-	var css = ".my-table{background-color:#f0f8ff;padding:20px}";
-	n(css, {
-	  "container": "head",
-	  "singleTag": true,
-	  "prepend": true,
-	  "attributes": {
-	    "id": "global"
+	  if (!css || typeof document === 'undefined') { return; }
+
+	  var head = document.head || document.getElementsByTagName('head')[0];
+	  var style = document.createElement('style');
+	  style.type = 'text/css';
+
+	  if (insertAt === 'top') {
+	    if (head.firstChild) {
+	      head.insertBefore(style, head.firstChild);
+	    } else {
+	      head.appendChild(style);
+	    }
+	  } else {
+	    head.appendChild(style);
 	  }
-	});
+
+	  if (style.styleSheet) {
+	    style.styleSheet.cssText = css;
+	  } else {
+	    style.appendChild(document.createTextNode(css));
+	  }
+	}
+
+	var css_248z = ".my-table{background-color:#f0f8ff;padding:20px}.my-table .test{color:rgba(18,52,86,.471);font-size:20px}";
+	styleInject(css_248z);
 
 	script.render = render;
 	script.__file = "src/MyTable.vue";

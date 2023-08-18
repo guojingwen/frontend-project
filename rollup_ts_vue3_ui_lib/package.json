@@ -31,9 +31,14 @@
     "rollup-plugin-peer-deps-external": "^2.2.4",
     "rollup-plugin-styles": "^4.0.0",
     "rollup-plugin-vue": "^6.0.0",
+    "sass": "^1.66.0",
     "typescript": "^4.8.2"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "^7.18.9"
+    "@babel/runtime-corejs3": "^7.18.9",
+    "nano": "^10.1.2",
+    "postcss-preset-env": "^9.1.1",
+    "rollup-plugin-postcss": "^4.0.2",
+    "rollup-plugin-scss": "^4.0.0"
   }
 }

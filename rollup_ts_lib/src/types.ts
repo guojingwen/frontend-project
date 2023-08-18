@@ -1,4 +1,3 @@
-
 export type AnyFun = (...args: any[]) => any;
 export type AnyObj = {
   [key: string]: string;

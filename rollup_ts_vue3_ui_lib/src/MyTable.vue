@@ -1,5 +1,6 @@
 <template>
     <div class="my-table">
+			<p class="test">AAA</p>
         <el-table :data="tableData" border>
             <el-table-column label="ID" prop="id"></el-table-column>
             <el-table-column label="姓名" prop="name"></el-table-column>
@@ -27,9 +28,15 @@ export default defineComponent({
     },
 })
 </script>
-<style>
+<style lang="scss">
+$size: 20px;
 .my-table {
     background-color: aliceblue;
     padding: 20px;
+		.test{
+			font-size: $size;
+			/* ios 9 会转会为 rgba(18,52,86,0.47059) */
+			color: #12345678;
+		}
 }
 </style>

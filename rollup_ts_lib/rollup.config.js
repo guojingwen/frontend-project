@@ -1,7 +1,7 @@
 const {babel} = require('@rollup/plugin-babel');
 const nodeResolve = require('@rollup/plugin-node-resolve');
 const commonjs = require("@rollup/plugin-commonjs");
-const {terser} = require('rollup-plugin-terser');
+const tenser = require("@rollup/plugin-terser")
 const path = require('path');
 const pkg = require('./package.json')
 
@@ -17,6 +17,7 @@ const plugins = [
     exclude: 'node_modules/**',
     extensions,
   }),
+	tenser.default(), 
 ]
 
 export default [
@@ -36,7 +37,6 @@ export default [
         extensions,
       }),
       ...plugins,
-      // terser(),
     ],
     external: ['lodash'],
   },

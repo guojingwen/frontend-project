@@ -1,5 +1,6 @@
 import {compose} from './utils';
 
+// 有兴趣的可以关闭压缩，调整browserslist测一下效果
 // console.log('es2019', '   xxx'.trimStart());
 
 // var a = '"foo" and "bar" and "baz"'

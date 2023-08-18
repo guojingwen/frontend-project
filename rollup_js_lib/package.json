@@ -15,9 +15,7 @@
   "author": "dashu",
   "license": "ISC",
   "browserslist": [
-    "Android >= 6",
-    "ios >= 11",
-    ">0.5%"
+    "ios >= 13"
   ],
   "devDependencies": {
     "@babel/cli": "^7.18.9",
@@ -33,6 +31,7 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "^7.18.9",
+    "@rollup/plugin-terser": "^0.4.3",
     "loadsh": "0.0.4"
   }
 }

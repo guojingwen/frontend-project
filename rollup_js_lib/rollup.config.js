@@ -1,6 +1,7 @@
 const {babel} = require('@rollup/plugin-babel');
 const nodeResolve = require('@rollup/plugin-node-resolve');
 const commonjs = require("@rollup/plugin-commonjs");
+const tenser = require("@rollup/plugin-terser")
 const path = require('path');
 const pkg = require('./package.json')
 
@@ -14,6 +15,7 @@ const plugins = [
     babelHelpers: 'runtime',
     exclude: 'node_modules/**',
   }),
+	tenser.default(), 
 ]
 
 export default [
