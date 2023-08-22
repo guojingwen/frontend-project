@@ -8,16 +8,16 @@
 </head>
 <body>
 	<div id="app">
-		<p>{{message}}</p>
+		<p>{{info.message}}</p>
 		<li v-for="todo in todos" :class="todo.className">
       {{ todo.text }}
     </li>
 	</div>
 	<script>
-		var app = new Vue({
+		window.app = new Vue({
 			el: '#app',
 			data: {
-				message: 'Hello Vue!',
+				info: {},
 				todos: [
 					{ text: '学习 JavaScript', className: 'aaa' },
 					{ text: '学习 Vue' },
@@ -30,6 +30,9 @@
 				console.log(this.$el?.querySelector('.aaa'));
 				await this.$nextTick();
 				console.log(this.$el.querySelector('.aaa'));
+			},
+			mounted() {
+				console.log('mounted', this, window.app);
 			}
 		})
 	</script>
