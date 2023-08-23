@@ -6,6 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
+  <style>div {font-size: 30px;}</style>
   <script src="../dist/vue.js"></script>
 </head>
 
@@ -19,9 +20,11 @@
 	 */
 	const {ref, effect} = Vue;
 	const obj = ref('张三');
+  
 	effect(() => {
 		document.getElementById('app').innerText = obj.value
 	});
+
 	setTimeout(() => {
 		obj.value = '李四';
 	}, 2000);

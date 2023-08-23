@@ -1,6 +1,7 @@
-import {
+import { 
   ReactiveEffect,
-  activeEffect
+  activeEffect,
+  triggerEffects
 } from './effect'
 
 
@@ -14,13 +15,26 @@ export class ComputedRefImpl<T> {
 	public dep?: Set<ReactiveEffect> = undefined
 	private _value!: T
 	private readonly effect: ReactiveEffect<T>
+
+	public _dirty = true
+
 	constructor(getter) {
-		this.effect = new ReactiveEffect(getter)
+		this.effect = new ReactiveEffect(getter, () => {
+			if (!this._dirty) {
+				this._dirty = true
+				this.dep && triggerEffects(this.dep)
+			}
+		})
+		this.effect.computed = this
 	}
 	get value() {
 		this.dep ??= new Set<ReactiveEffect>()
 		this.dep.add(activeEffect!)
-		this._value = this.effect.run()
+		if (this._dirty) {
+			this._dirty = false
+			// this.effect.run 指向的就是computed()的参数1
+			this._value = this.effect.run()
+		}
 		return this._value
 	}
 }

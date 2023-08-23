@@ -6,11 +6,6 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
-	<style>
-		div {
-			font-size: 30px;
-		}
-	</style>
   <script src="../dist/vue.js"></script>
 </head>
 
@@ -19,15 +14,16 @@
 </body>
 
 <script>
-	const {reactive, effect} = Vue;
-	const obj = reactive({
-		name: '张三'
-	});
+	/**
+	 * step2 实现ref支持基本类型数据
+	 */
+	const {ref, effect} = Vue;
+	const obj = ref('张三');
 	effect(() => {
-		document.getElementById('app').innerText = obj.name
+		document.getElementById('app').innerText = obj.value
 	});
 	setTimeout(() => {
-		obj.name = '李四';
+		obj.value = '李四';
 	}, 2000);
 </script>
 

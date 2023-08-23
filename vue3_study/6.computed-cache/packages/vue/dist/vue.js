@@ -28,6 +28,11 @@ var Vue = (function (exports) {
         throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
     }
 
+    typeof SuppressedError === "function" ? SuppressedError : function (error, suppressed, message) {
+        var e = new Error(message);
+        return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
+    };
+
     function effect(fn) {
         var _effect = new ReactiveEffect(fn);
         _effect.run();
@@ -58,6 +63,7 @@ var Vue = (function (exports) {
         return ReactiveEffect;
     }());
     function track(target, p) {
+        // if (!activeEffect) return
         var depsMap = targetMap.get(target);
         if (!depsMap) {
             targetMap.set(target, (depsMap = new Map()));
@@ -78,15 +84,13 @@ var Vue = (function (exports) {
         triggerEffects(dep);
     }
     function triggerEffects(effects) {
-        var e_1, _a;
+        var e_1, _a, e_2, _b;
         try {
+            // 让 ComputedRefImpl 实例的副作用先执行，利用dirty标志避免死循环
             for (var effects_1 = __values(effects), effects_1_1 = effects_1.next(); !effects_1_1.done; effects_1_1 = effects_1.next()) {
                 var effect_1 = effects_1_1.value;
                 if (effect_1.computed) {
                     effect_1.scheduler();
-                }
-                else {
-                    effect_1.run();
                 }
             }
         }
@@ -96,6 +100,21 @@ var Vue = (function (exports) {
                 if (effects_1_1 && !effects_1_1.done && (_a = effects_1.return)) _a.call(effects_1);
             }
             finally { if (e_1) throw e_1.error; }
+        }
+        try {
+            for (var effects_2 = __values(effects), effects_2_1 = effects_2.next(); !effects_2_1.done; effects_2_1 = effects_2.next()) {
+                var effect_2 = effects_2_1.value;
+                if (!effect_2.computed) {
+                    effect_2.run();
+                }
+            }
+        }
+        catch (e_2_1) { e_2 = { error: e_2_1 }; }
+        finally {
+            try {
+                if (effects_2_1 && !effects_2_1.done && (_b = effects_2.return)) _b.call(effects_2);
+            }
+            finally { if (e_2) throw e_2.error; }
         }
     }
 
@@ -191,7 +210,7 @@ var Vue = (function (exports) {
                 this.dep.add(exports.activeEffect);
                 if (this._dirty) {
                     this._dirty = false;
-                    // 执行 run 函数
+                    // this.effect.run 指向的就是computed()的参数1
                     this._value = this.effect.run();
                 }
                 return this._value;

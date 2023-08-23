@@ -6,11 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
-	<style>
-		div {
-			font-size: 30px;
-		}
-	</style>
+  <style>div {font-size: 30px;}</style>
   <script src="../dist/vue.js"></script>
 </head>
 
@@ -19,13 +15,24 @@
 </body>
 
 <script>
-	const {reactive, effect} = Vue;
+	const {reactive, effect, computed} = Vue;
+
 	const obj = reactive({
 		name: '张三'
 	});
+
+	const computedObj = computed(() => {
+    console.log('计算属性执行计算');
+    return `姓名：${obj.name}`
+  });
+
 	effect(() => {
-		document.getElementById('app').innerText = obj.name
+		document.getElementById('app').innerText
+      = computedObj.value
+    document.querySelector('#app').innerHTML
+      = computedObj.value
 	});
+
 	setTimeout(() => {
 		obj.name = '李四';
 	}, 2000);

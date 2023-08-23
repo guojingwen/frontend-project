@@ -17,7 +17,7 @@ export let activeEffect: ReactiveEffect | undefined
 
 export class ReactiveEffect<T = any> {
 	constructor(public fn: () => T) {
-		this.fn = fn
+		// this.fn = fn
 	}
 	run() {
 		activeEffect = this

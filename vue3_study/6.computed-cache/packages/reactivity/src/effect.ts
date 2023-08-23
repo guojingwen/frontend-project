@@ -35,6 +35,7 @@ export class ReactiveEffect<T = any> {
 }
 
 export function track(target: object, p: unknown) {
+  // if (!activeEffect) return
   let depsMap = targetMap.get(target)
   if (!depsMap) {
     targetMap.set(target, (depsMap = new Map()))
@@ -55,10 +56,14 @@ export function trigger(target: object, p: unknown) {
 }
 
 export function triggerEffects(effects: Set<ReactiveEffect>) {
+  // 让 ComputedRefImpl 实例的副作用先执行，利用dirty标志避免死循环
   for (let effect of effects) {
     if (effect.computed) {
       effect.scheduler!()
-    } else {
+    }
+  }
+  for (let effect of effects) {
+    if (!effect.computed) {
       effect.run()
     }
   }
