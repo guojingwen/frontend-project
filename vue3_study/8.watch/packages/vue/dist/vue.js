@@ -342,6 +342,49 @@ var Vue = (function (exports) {
         });
     }
 
+    function watch(source, cb, _a) {
+        var _b = _a === void 0 ? {} : _a, immediate = _b.immediate, deep = _b.deep;
+        var getter;
+        if (isReactive(source)) {
+            getter = function () { return source; };
+            deep = true;
+        }
+        else {
+            getter = function () { };
+        }
+        if (deep) {
+            getter = function () { return traverse(source); };
+        }
+        var oldValue = {};
+        var job = function () {
+            var newValue = effect.run();
+            if (deep || Object.is(newValue, oldValue)) {
+                cb(newValue, oldValue);
+                oldValue = newValue;
+            }
+        };
+        var scheduler = function () { return queuePostFlushCb(job); };
+        var effect = new ReactiveEffect(getter, scheduler);
+        if (immediate) {
+            job();
+        }
+        else {
+            oldValue = effect.run();
+        }
+        return function () { return effect.stop(); };
+    }
+    // 遍历代理对象，完成依赖收集
+    function traverse(value) {
+        if (!isObject(value)) {
+            return value;
+        }
+        for (var key in value) {
+            // 触发 get 触发依赖收集啊
+            traverse(value[key]);
+        }
+        return value;
+    }
+
     exports.ComputedRefImpl = ComputedRefImpl;
     exports.ReactiveEffect = ReactiveEffect;
     exports.computed = computed;
@@ -354,9 +397,11 @@ var Vue = (function (exports) {
     exports.ref = ref;
     exports.toReactive = toReactive;
     exports.track = track;
+    exports.traverse = traverse;
     exports.trigger = trigger;
     exports.triggerEffect = triggerEffect;
     exports.triggerEffects = triggerEffects;
+    exports.watch = watch;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 
