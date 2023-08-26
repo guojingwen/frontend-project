@@ -18,7 +18,10 @@ export function reactive(target: object): any {
       trigger(target, p)
       return res
     }
-  })
+  } as ProxyHandler<any>)
+  observed.__v_isReactive = true
   reactiveMap.set(target, observed)
   return observed
 }
+
+export const isReactive = value => !!value?.__v_isReactive
