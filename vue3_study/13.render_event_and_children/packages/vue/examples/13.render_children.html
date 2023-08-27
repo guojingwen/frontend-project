@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="../dist/vue.js"></script>
+  <!-- <script src="../../../../vue.global.js"></script> -->
+</head>
+
+<body>
+  <div id="app"></div>
+  <script>
+    const { h, render } = Vue
+    const vnode = h('div', 'hello render')
+    render(vnode, document.querySelector('#app'))
+
+    setTimeout(() => {
+      const vnode2 = h('div', {}, [
+        h('li', {key: 1}, 'p1'),
+        h('li', {key: 2}, 'p2'),
+      ])
+      render(vnode2, document.querySelector('#app'))
+    }, 2000);
+  </script>
+</body>
+</html>
+
+
