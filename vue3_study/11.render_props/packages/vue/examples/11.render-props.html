@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="../dist/vue.js"></script>
+  <!-- <script src="../../../../vue.global.js"></script> -->
+</head>
+
+<body>
+  <div id="app"></div>
+  <style>
+    .test {
+      color: red;
+      font-size: 30px;
+    }
+  </style>
+  <script>
+    const { h, render } = Vue
+    const vnode = h('textarea', {
+      class: 'test',
+      style: {
+        width: '100%'
+      },
+      value: 'hello render'
+    })
+    render(vnode, document.getElementById('app'))
+  </script>
+</body>
+</html>
