@@ -50,7 +50,7 @@ export function createRenderer(options?: RendererOptions) {
     if (oldVNode == null) {
       mountElement(newVNode, container, anchor)
     } else {
-      // TODO卸载
+      // TODO 更新
     }
   }
   function mountElement(vnode, container, anchor) {
