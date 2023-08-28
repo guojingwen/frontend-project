@@ -76,8 +76,8 @@ export function createRenderer(options?: RendererOptions) {
     const Component = initialVNode.type
     instance.render = Component.render
     // 设置组件渲染
-    console.log(((window as any)._vnode = initialVNode))
     setupRenderEffect(instance, initialVNode, container, anchor)
+    console.log(((window as any)._vnode = initialVNode))
   }
   function setupRenderEffect(
     instance: ComponentInstance,
