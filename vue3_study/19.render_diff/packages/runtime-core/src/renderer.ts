@@ -267,13 +267,156 @@ export function createRenderer(options?: RendererOptions) {
     }
 
     // 5. 乱序的 diff 比对
+    /**
+     * 举个例子
+     * 旧子节点： a     b     c     d     e
+     * 新子节点： new-a new-c new-b new-f new-e
+     * 0. 初始状态：索引 `i=0` 旧节点结束索引`e1=4` 新节点结束索引`e2=4`
+     * 1. 经过场景1 自前到后比对： 索引 `i=1` 旧节点结束索引`e1=4` 新节点结束索引`e2=4`
+     * 2. 经过场景2 自后到前比对： 索引 `i=1` 旧节点结束索引`e1=3` 新节点结束索引`e2=3`
+     * 3. 新节点和旧节点都存在 跳过场景三和四
+     * 4. 进入场景五 剩余元素为
+     *    旧子节点： b     c     d
+     *    新子节点： new-c new-b new-f
+     */
     else {
-      // 5.1 创建 keyToNewIndexMap
-      // 5.2 循环oldChildren 并尝试进行 patch（打补丁）或 unmount（删除）旧节点
-      // 这里有几个变量 已经修复的新节点数量、 新节点待修补的数量
+      // 5.1 创建字典 keyToNewIndexMap {旧子节点索引 => 新子节点索引}
+      const oldStartIndex = i
+      const newStartIndex = i
+      const keyToNewIndexMap = new Map()
+      for (i = newStartIndex; i <= newChildrenEnd; i++) {
+        const nextChild = normalizeVNode(newChildren[i])
+        if (nextChild.key != null) {
+          keyToNewIndexMap.set(nextChild.key, i)
+        }
+      }
+      // console.log(keyToNewIndexMap)
+      // 这时 keyToNewIndexMap 值为
+      // Map(3) {3 => 1, 2 => 2, 6 => 3}
+
+      // 5.2 循环 oldChildren ，并尝试进行 patch（打补丁）或 unmount（删除）旧节点
+      let j = 0
+      // 已经修复的新节点数量, 有三个新节点需要修复，现在都还没修复
+      let patched = 0
+      // 新节点待修补的数量 = newChildrenEnd - newChildrenStart + 1
+      const toBePatched = newChildrenEnd - newStartIndex + 1
+      // 标记位：节点是否需要移动
+      let moved = false
+      // 配合 moved 进行使用，它始终保存当前最大的 index 值
+      let maxNewIndexSoFar = 0
+      // map字典 {新子节点索引 => 旧子节点索引}
+      // 注意 旧子节点索引不包含已处理的节点
+      const newIndexToOldIndexMap = new Array(toBePatched).fill(0)
+      for (i = oldStartIndex; i <= oldChildrenEnd; i++) {
+        const prevChild = oldChildren[i]
+        // 如果当前 已经处理的节点数量 > 待处理的节点数量
+        // 那么就说明，所有的节点都已经更新完成
+        // 剩余的旧节点全部删除即可
+        if (patched >= toBePatched) {
+          // 所有的节点都已经更新完成，剩余的旧节点全部删除即可
+          hostRemove(prevChild.el!)
+          continue
+        }
+        // 新节点需要存在的位置，需要根据旧节点来进行寻找（包含已处理的节点。即：new-c 被认为是 1）
+        let newIndex
+        if (prevChild.key != null) {
+          // 根据旧节点的 key，从 keyToNewIndexMap 中可以获取到新节点对应的位置
+          newIndex = keyToNewIndexMap.get(prevChild.key)
+        } else {
+          // TODO 寻找旧子节点没有key的进行匹配，暂不考虑
+        }
+        if (newIndex === undefined) {
+          // 说明该旧子节点不存在， 直接删除
+          hostRemove(prevChild.el!)
+          // 这里会删除 `d`
+        } else {
+          // 该子节点在新旧VNode中都存在
+          // 新子节点索引都不包含已计算的元素，即索引从0开始
+          // 旧子节点索引+1 有特殊作用
+          newIndexToOldIndexMap[newIndex - newStartIndex] = i + 1
+          // maxNewIndexSoFar 会存储当前最大的 newIndex，它应该是一个递增的，如果没有递增，则证明有节点需要移动
+          if (newIndex >= maxNewIndexSoFar) {
+            // 持续递增
+            maxNewIndexSoFar = newIndex
+          } else {
+            // 没有递增，则需要移动，moved = true
+            moved = true
+          }
+          // 打补丁
+          patch(prevChild, newChildren[newIndex], container, null)
+          // 自增已处理的节点数量
+          patched++
+        }
+      }
+      // 5.2会循环3次 得到的 newIndexToOldIndexMap
+      // {  1:2,  0:3,         2:0 } // 依次执行的结果
+      // 即  b    c   d被删除   最后一个是初始值
+      // moved=true 因为遍历 c 的时候算出来它需要移动位置
+      // maxNewIndexSoFar=2  只遍历了 b、c、d 它们在新的VNode中b的索引最大，值为2
+
       // 5.3 针对移动和挂载的处理
-      // 假设如下元素
+      // 仅当节点需要移动的时候，我们才需要生成最长递增子序列，否则只需要有一个空数组即可
+      // increasingNewIndexSequence 最大上升子序列索引，如果元素在该数组中则不需要移动
+      const increasingNewIndexSequence = moved
+        ? getSequence(newIndexToOldIndexMap)
+        : []
+      // console.log(increasingNewIndexSequence)
+      // 针对当前场景 increasingNewIndexSequence 值为 [2]
+      // 也就是说 new-b 元素不需要移动
+      // 还剩下 new-c 和 new-f需要处理
+
+      // j >= 0 表示：初始值为 最长递增子序列的最后下标
+      // j < 0 表示：《不存在》最长递增子序列。
+      j = increasingNewIndexSequence.length - 1
+      // 倒序循环，以便我们可以使用最后修补的节点作为锚点
+      // 这里是先处理 new-f 再处理 new-c
+      for (i = toBePatched - 1; i >= 0; i--) {
+        // nextIndex（需要更新的新节点下标） = newChildrenStart + i
+        const nextIndex = newStartIndex + i
+        // 根据 nextIndex 拿到要处理的 新节点
+        const nextChild = newChildren[nextIndex]
+        // 获取锚点（是否超过了最长长度）
+        // parent.insertBefore(child, anchor) 将 child插入到next前面
+        // 如果 anchor为 null 表示插入到parent容器的最下面
+        const anchor =
+          nextIndex + 1 < newChildrenLength
+            ? newChildren[nextIndex + 1].el
+            : parentAnchor
+        // 如果 newIndexToOldIndexMap 中保存的 value = 0，则表示：新节点没有用对应的旧节点，此时需要挂载新节点
+        if (newIndexToOldIndexMap[i] === 0) {
+          // 挂载新节点
+          patch(null, nextChild, container, anchor)
+        } else if (moved) {
+          /* if (j >= 0 && nextIndex === increasingNewIndexSequence[j]) {
+            // 如果索引在最大上升子序列中，则不需要移动位置
+            j--
+            console.log('不需要移动的元素', nextChild.el)
+          } else {
+            hostInsert(nextChild.el!, container, anchor)
+          } */
+
+          if (j < 0 || i !== increasingNewIndexSequence[j]) {
+            hostInsert(nextChild.el!, container, anchor)
+          } else {
+            j--
+            // console.log('不需要移动的元素', nextChild.el)
+          }
+        }
+      }
     }
+    /**
+     * 总结 patch过程
+     * 旧子节点： a     b     c     d     e
+     * 新子节点： new-a new-c new-b new-f new-e
+     * 1. 更新 a  为 new-a
+     * 2. 更新 e  为 new-e
+     * 3. 更新 b  为 new-b
+     * 4. 更新 c  为 new-c
+     * 5. 删除 d
+     * 6. 将 new-f 插入到 new-e 前面
+     * 7. new-b 在最大上升子序列中， 不需要移动
+     * 8. 将 new-c 插入到 new-b 前面
+     */
   }
   function patchProps(el: Element, vnode, oldProps, newProps) {
     if (oldProps !== newProps) {
@@ -321,4 +464,56 @@ export function createRenderer(options?: RendererOptions) {
       patch(null, children[index], container, anchor)
     })
   }
+}
+
+function getSequence(arr) {
+  if (!arr.length) return []
+  if (arr.length < 2) return [0]
+
+  const preIndexs = arr.slice()
+  let i, j, start, end, center
+  const len = arr.length
+
+  // result存放的是最大上升子序列的下表
+  const result = [0]
+  for (i = 1; i < len; i++) {
+    j = result.at(-1)
+    const arrI = arr[i]
+    if (arrI === 0) continue // 0表示新增的元素
+    const lastIndex = result.at(-1)!
+    if (arrI > arr[lastIndex]) {
+      preIndexs[i] = j
+      result.push(i)
+      continue
+    }
+
+    start = 0
+    end = result.length
+    while (start < end) {
+      //  >> 右移运算符
+      // 等于 Math.floor((u+v)/2);
+      // 使用二进制运算可以大幅提高计算效率
+      center = (start + end) >> 1
+      if (arrI > arr[result[center]]) {
+        start = center + 1
+      } else {
+        end = center
+      }
+    }
+    if (arrI < arr[result[start]]) {
+      if (start > 0) {
+        preIndexs[i] = result[start - 1]
+      }
+    }
+    result[start] = i
+  }
+  // console.log(preIndexs);
+
+  end = result.length
+  let temp = result[end - 1]
+  while (end--) {
+    result[end] = temp
+    temp = preIndexs[temp]
+  }
+  return result
 }
