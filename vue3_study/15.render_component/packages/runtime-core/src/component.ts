@@ -26,10 +26,10 @@ export interface ComponentInstance {
   uid: number
   vnode: VNode
   subTree: null | Element
-  type: ShapeFlags
+  type: any
   effect: null | ReactiveEffect
   update: null | Function
   render: null | Function
   isMounted: boolean
-  data: null | object
+  data: any
 }
