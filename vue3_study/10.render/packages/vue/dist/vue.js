@@ -552,6 +552,7 @@ var Vue = (function (exports) {
 
     var renderer;
     var rendererOptions = Object.assign({}, nodeOps);
+    // 这里是一种设计模式 叫**依赖注入**，通过参数的形式注入依赖
     function render() {
         var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {

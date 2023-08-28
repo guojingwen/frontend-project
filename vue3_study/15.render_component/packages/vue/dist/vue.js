@@ -566,6 +566,7 @@ var Vue = (function (exports) {
             var Component = initialVNode.type;
             instance.render = Component.render;
             // 设置组件渲染
+            console.log((window._vnode = initialVNode));
             setupRenderEffect(instance, initialVNode, container, anchor);
         }
         function setupRenderEffect(instance, initialVNode, container, anchor) {
