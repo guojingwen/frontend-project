@@ -1171,10 +1171,127 @@ var Vue = (function (exports) {
         return renderer.render.apply(renderer, __spreadArray([], __read(args), false));
     }
 
+    function baseParse(content) {
+        var context = createParserContent(content);
+        var children = parseChildren(context, []);
+        console.log(children);
+        return {};
+    }
+    function createParserContent(content) {
+        return {
+            source: content
+        };
+    }
+    function parseChildren(context, ancestors) {
+        var nodes = [];
+        while (!isEnd(context, ancestors)) {
+            var s = context.source;
+            var node = void 0;
+            if (s.startsWith('{{')) ;
+            else if (s[0] === '<') {
+                if (/[a-z]/i.test(s[1])) {
+                    node = parseElement(context, ancestors);
+                }
+            }
+            if (!node) {
+                node = parseText(context);
+            }
+            nodes.push(node);
+        }
+        return nodes;
+    }
+    function parseElement(context, ancestors) {
+        var element = parseTag(context);
+        ancestors.push(element);
+        var children = parseChildren(context, ancestors);
+        ancestors.pop();
+        element.children = children;
+        if (context.source.startsWith(element.tag)) {
+            parseTag(context);
+        }
+        return element;
+    }
+    function parseTag(context, type) {
+        var match = /^<\/?([a-z][^\t\r\n\f />]*)/i.exec(context.source);
+        var tag = match[1];
+        advanceBy(context, match[0].length);
+        var isSelfCloseing = context.source.startsWith('/>');
+        advanceBy(context, isSelfCloseing ? 2 : 1);
+        return {
+            type: 1 /* NodeTypes.ELEMENT */,
+            tag: tag,
+            TagType: 0 /* ElementTypes.ELEMENT */,
+            children: [],
+            props: []
+        };
+    }
+    function parseText(context) {
+        var endTokens = ['<', '{{'];
+        var endIndex = context.source.length;
+        for (var i = 0; i < endTokens.length; i++) {
+            var index = context.source.indexOf(endTokens[i], 1);
+            if (index !== -1 && endIndex > index) {
+                endIndex = index;
+                break;
+            }
+        }
+        var content = parseTextData(context, endIndex);
+        return {
+            type: 2 /* NodeTypes.TEXT */,
+            content: content
+        };
+    }
+    function parseTextData(context, length) {
+        var rawText = context.source.slice(0, length);
+        advanceBy(context, length);
+        return rawText;
+    }
+    function isEnd(context, ancestors) {
+        var s = context.source;
+        if (s.startsWith('</')) {
+            for (var i = ancestors.length - 1; i >= 0; --i) {
+                if (startsWithEndTagOpen(s, ancestors[i].tag)) {
+                    return true;
+                }
+            }
+        }
+        return !s;
+    }
+    /**
+     * 判断当前是否为《标签结束的开始》。比如 </div> 就是 div 标签结束的开始
+     * @param source 模板。例如：</div>
+     * @param tag 标签。例如：div
+     * @returns
+     */
+    function startsWithEndTagOpen(source, tag) {
+        return source.startsWith('</');
+        /* return (
+              source.startsWith('</') &&
+              source.slice(2, 2 + tag.length).toLowerCase() === tag.toLowerCase() &&
+              /[\t\r\n\f />]/.test(source[2 + tag.length] || '>')
+          ) */
+    }
+    function advanceBy(context, numberOfCharacters) {
+        var source = context.source;
+        context.source = source.slice(numberOfCharacters);
+    }
+
+    function baseCompile(template, options) {
+        var ast = baseParse(template);
+        console.log(JSON.stringify(ast));
+        return {};
+    }
+
+    function compile(template, options) {
+        return baseCompile(template);
+    }
+
     exports.ComputedRefImpl = ComputedRefImpl;
     exports.Fragment = Fragment;
     exports.ReactiveEffect = ReactiveEffect;
     exports.Text = Text;
+    exports.baseCompile = baseCompile;
+    exports.compile = compile;
     exports.computed = computed;
     exports.createElementVNode = createVNode;
     exports.createRenderer = createRenderer;

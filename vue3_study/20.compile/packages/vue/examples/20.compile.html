@@ -12,32 +12,10 @@
 <body>
   <div id="app"></div>
   <script>
-    // 验证场景2、场景4 新节点多于旧节点时
-    const { h, render } = Vue
-    const vnode = h('ul', [
-      h('li', {key: 1}, 'a'),
-      h('li', {key: 2}, 'b'),
-      h('li', {key: 3}, 'c'),
-      h('li', {key: 4}, 'd'),
-      h('li', {key: 5}, 'e'),
-      h('li', {key: 6}, 'f'),
-    ])
-    // 挂载
-    render(vnode, document.querySelector('#app'))
-  
-    // 延迟两秒，生成新的 vnode，进行更新操作
-    setTimeout(() => {
-      const vnode2 = h('ul', [
-        h('li', {key: 1}, 'new-a'),
-        h('li', {key: 3}, 'new-c'),
-        h('li', {key: 2}, 'new-b'),
-        h('li', {key: 4}, 'new-d'),
-        h('li', {key: 7}, 'new-g'),
-        h('li', {key: 6}, 'new-f'),
-      ])
-      // 
-      render(vnode2, document.querySelector('#app'))
-    }, 2000);
+    const { compile } = Vue
+    const template = `<div>hello world</div>`;
+    const renderFn = compile(template)
+    console.log(renderFn)
   </script>
 </body>
 </html>
