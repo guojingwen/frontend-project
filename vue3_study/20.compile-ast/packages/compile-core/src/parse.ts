@@ -3,13 +3,21 @@ import { ElementTypes, NodeTypes } from './ast'
 export function baseParse(content: string) {
   const context = createParserContent(content)
   const children = parseChildren(context, [])
-  console.log(children)
-  return {}
+
+  return createRoot(children)
 }
 
 function createParserContent(content): ParserContext {
   return {
     source: content
+  }
+}
+
+export function createRoot(children) {
+  return {
+    type: NodeTypes.ROOT,
+    children,
+    loc: {}
   }
 }
 export interface ParserContext {
@@ -65,7 +73,7 @@ function parseTag(context: ParserContext, type: TagType) {
   return {
     type: NodeTypes.ELEMENT,
     tag,
-    TagType: ElementTypes.ELEMENT,
+    tagType: ElementTypes.ELEMENT,
     children: [] as any[],
     props: []
   }

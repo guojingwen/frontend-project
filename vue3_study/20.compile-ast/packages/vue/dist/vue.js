@@ -1174,12 +1174,18 @@ var Vue = (function (exports) {
     function baseParse(content) {
         var context = createParserContent(content);
         var children = parseChildren(context, []);
-        console.log(children);
-        return {};
+        return createRoot(children);
     }
     function createParserContent(content) {
         return {
             source: content
+        };
+    }
+    function createRoot(children) {
+        return {
+            type: 0 /* NodeTypes.ROOT */,
+            children: children,
+            loc: {}
         };
     }
     function parseChildren(context, ancestors) {
@@ -1220,7 +1226,7 @@ var Vue = (function (exports) {
         return {
             type: 1 /* NodeTypes.ELEMENT */,
             tag: tag,
-            TagType: 0 /* ElementTypes.ELEMENT */,
+            tagType: 0 /* ElementTypes.ELEMENT */,
             children: [],
             props: []
         };
