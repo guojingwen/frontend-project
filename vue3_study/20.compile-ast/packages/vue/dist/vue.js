@@ -1282,7 +1282,7 @@ var Vue = (function (exports) {
         console.log(ast);
         /* transform(
           ast,
-          extend(options, {
+          Object.assign(options, {
             nodeTransforms: [transformElement, transformText, transformIf]
           })
         )
