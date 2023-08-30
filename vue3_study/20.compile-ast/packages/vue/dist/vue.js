@@ -1172,14 +1172,11 @@ var Vue = (function (exports) {
     }
 
     function baseParse(content) {
-        var context = createParserContent(content);
-        var children = parseChildren(context, []);
-        return createRoot(children);
-    }
-    function createParserContent(content) {
-        return {
+        var context = {
             source: content
         };
+        var children = parseChildren(context, []);
+        return createRoot(children);
     }
     function createRoot(children) {
         return {
@@ -1212,7 +1209,7 @@ var Vue = (function (exports) {
         var children = parseChildren(context, ancestors);
         ancestors.pop();
         element.children = children;
-        if (context.source.startsWith(element.tag)) {
+        if (startsWithEndTagOpen(context.source, element.tag)) {
             parseTag(context);
         }
         return element;
@@ -1270,12 +1267,10 @@ var Vue = (function (exports) {
      * @returns
      */
     function startsWithEndTagOpen(source, tag) {
-        return source.startsWith('</');
-        /* return (
-              source.startsWith('</') &&
-              source.slice(2, 2 + tag.length).toLowerCase() === tag.toLowerCase() &&
-              /[\t\r\n\f />]/.test(source[2 + tag.length] || '>')
-          ) */
+        // return source.startsWith('</')
+        return (source.startsWith('</') &&
+            source.slice(2, 2 + tag.length).toLowerCase() === tag.toLowerCase() &&
+            /[\t\r\n\f />]/.test(source[2 + tag.length] || '>'));
     }
     function advanceBy(context, numberOfCharacters) {
         var source = context.source;
@@ -1284,8 +1279,15 @@ var Vue = (function (exports) {
 
     function baseCompile(template, options) {
         var ast = baseParse(template);
-        console.log(JSON.stringify(ast));
-        return {};
+        console.log(ast);
+        /* transform(
+          ast,
+          extend(options, {
+            nodeTransforms: [transformElement, transformText, transformIf]
+          })
+        )
+      
+        return generate(ast) */
     }
 
     function compile(template, options) {
@@ -1297,10 +1299,12 @@ var Vue = (function (exports) {
     exports.ReactiveEffect = ReactiveEffect;
     exports.Text = Text;
     exports.baseCompile = baseCompile;
+    exports.baseParse = baseParse;
     exports.compile = compile;
     exports.computed = computed;
     exports.createElementVNode = createVNode;
     exports.createRenderer = createRenderer;
+    exports.createRoot = createRoot;
     exports.createVNode = createVNode;
     exports.effect = effect;
     exports.h = h;

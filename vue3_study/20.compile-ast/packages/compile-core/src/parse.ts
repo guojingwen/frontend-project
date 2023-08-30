@@ -1,16 +1,12 @@
 import { ElementTypes, NodeTypes } from './ast'
 
 export function baseParse(content: string) {
-  const context = createParserContent(content)
+  const context: ParserContext = {
+    source: content
+  }
   const children = parseChildren(context, [])
 
   return createRoot(children)
-}
-
-function createParserContent(content): ParserContext {
-  return {
-    source: content
-  }
 }
 
 export function createRoot(children) {
@@ -20,6 +16,7 @@ export function createRoot(children) {
     loc: {}
   }
 }
+
 export interface ParserContext {
   source: string
 }
@@ -56,7 +53,7 @@ function parseElement(context: ParserContext, ancestors) {
 
   element.children = children
 
-  if (context.source.startsWith(element.tag)) {
+  if (startsWithEndTagOpen(context.source, element.tag)) {
     parseTag(context, TagType.End)
   }
   return element
@@ -121,12 +118,12 @@ function isEnd(context: ParserContext, ancestors) {
  * @returns
  */
 function startsWithEndTagOpen(source: string, tag: string): boolean {
-  return source.startsWith('</')
-  /* return (
-		source.startsWith('</') &&
-		source.slice(2, 2 + tag.length).toLowerCase() === tag.toLowerCase() &&
-		/[\t\r\n\f />]/.test(source[2 + tag.length] || '>')
-	) */
+  // return source.startsWith('</')
+  return (
+    source.startsWith('</') &&
+    source.slice(2, 2 + tag.length).toLowerCase() === tag.toLowerCase() &&
+    /[\t\r\n\f />]/.test(source[2 + tag.length] || '>')
+  )
 }
 function advanceBy(context: ParserContext, numberOfCharacters: number) {
   const { source } = context
