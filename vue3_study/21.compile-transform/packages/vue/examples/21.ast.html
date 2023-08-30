@@ -12,17 +12,13 @@
 <body>
   <div id="app"></div>
   <script>
-    const { compile, render, h } = Vue
-
+    const { compile, h, render } = Vue
+    const renderFn = compile(template)
     const component = {
-      render: compile(`<div>
-        <h2>hello world</h2>
-        </div>`)
+      render: compile(`<div>hello world</div>`)
     }
-
-    /* const vnode = h(component)
-
-    render(vnode, document.getElementById('app')) */
+    const vnode = h(component);
+    // render(vnode, document.getElementById('app'))
   </script>
 </body>
 </html>
