@@ -1354,7 +1354,7 @@ var Vue = (function (exports) {
     }
 
     var _a;
-    var CREATE_ELEMENT_VNODE = Symbol('createElementNode');
+    var CREATE_ELEMENT_VNODE = Symbol('createElementVNode');
     var CREATE_VNODE = Symbol('createVNode');
     var helperNameMap = (_a = {},
         _a[CREATE_ELEMENT_VNODE] = 'createElementVNode',
@@ -1578,7 +1578,6 @@ var Vue = (function (exports) {
 
     function baseCompile(template, options) {
         if (options === void 0) { options = {}; }
-        console.log('baseCompile', template);
         var ast = baseParse(template);
         transform(ast, Object.assign(options, {
             nodeTransforms: [transformElement, transformText]

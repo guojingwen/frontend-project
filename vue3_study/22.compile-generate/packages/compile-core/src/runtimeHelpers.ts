@@ -1,4 +1,4 @@
-export const CREATE_ELEMENT_VNODE = Symbol('createElementNode')
+export const CREATE_ELEMENT_VNODE = Symbol('createElementVNode')
 export const CREATE_VNODE = Symbol('createVNode')
 
 export const helperNameMap = {

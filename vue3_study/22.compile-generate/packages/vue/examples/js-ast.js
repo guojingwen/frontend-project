@@ -18,17 +18,12 @@
         children: [
           /* 这里的东西不需要关注了 */
         ],
-        codegenNode: {
-          type: 13,
-          tag: '\\"h2\\"',
-          props: [],
-          children: [{ type: 2, content: 'hello world' }]
-        }
+        codegenNode: {}
       },
       { type: 2, content: '\\n    ' }
     ]
   },
-  helpers: [Symbol('createElementVNode')], // 把null 替换为 CREATE_ELEMENT_VNODE
+  helpers: [null], // 把null 替换为 CREATE_ELEMENT_VNODE
   components: [],
   directives: [],
   imports: [],

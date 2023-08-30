@@ -5,7 +5,6 @@ import { transformText } from './transforms/transformText'
 import { generate } from './codegen'
 
 export function baseCompile(template: string, options = {}) {
-  console.log('baseCompile', template)
   const ast = baseParse(template)
   transform(
     ast,
