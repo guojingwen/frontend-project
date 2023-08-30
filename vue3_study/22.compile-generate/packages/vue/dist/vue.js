@@ -618,7 +618,7 @@ var Vue = (function (exports) {
         function setupRenderEffect(instance, initialVNode, container, anchor) {
             var componentUpdateFn = function () {
                 if (!instance.isMounted) {
-                    var render_1 = instance.render, data = instance.data, beforeMount = instance.beforeMount, mounted = instance.mounted;
+                    var render_1 = instance.render, _a = instance.data, data = _a === void 0 ? {} : _a, beforeMount = instance.beforeMount, mounted = instance.mounted;
                     if (beforeMount) {
                         callHook(beforeMount, instance.data);
                     }
@@ -1172,14 +1172,11 @@ var Vue = (function (exports) {
     }
 
     function baseParse(content) {
-        var context = createParserContent(content);
-        var children = parseChildren(context, []);
-        return createRoot(children);
-    }
-    function createParserContent(content) {
-        return {
+        var context = {
             source: content
         };
+        var children = parseChildren(context, []);
+        return createRoot(children);
     }
     function createRoot(children) {
         return {
@@ -1348,7 +1345,6 @@ var Vue = (function (exports) {
     function createRootCodegen(root) {
         var children = root.children;
         // Vue2 仅支持单个根节点
-        debugger;
         if (children.length === 1) {
             var child = children[0];
             if (isSingleElementRoot(root, child) && child.codegenNode) {
@@ -1360,8 +1356,8 @@ var Vue = (function (exports) {
     var _a;
     var CREATE_ELEMENT_VNODE = Symbol('createElementNode');
     var CREATE_VNODE = Symbol('createVNode');
-    (_a = {},
-        _a[CREATE_ELEMENT_VNODE] = 'createElementNode',
+    var helperNameMap = (_a = {},
+        _a[CREATE_ELEMENT_VNODE] = 'createElementVNode',
         _a[CREATE_VNODE] = 'createVNode',
         _a);
 
@@ -1452,14 +1448,144 @@ var Vue = (function (exports) {
         }
     };
 
+    /**
+     * 先按照这个拼接
+    const _Vue = Vue
+    return function render(_ctx, _cache) {
+      with (_ctx) {
+        const { createElementVNode: _createElementVNode } = _Vue
+        return _createElementVNode(
+          "div",
+          [],
+          ["hello world"]
+        )
+      }
+    }
+     */
+    var aliasHelper = function (s) { return "".concat(helperNameMap[s], ": _").concat(helperNameMap[s]); };
+    function generate(ast) {
+        var context = createCodegenContext(ast);
+        var push = context.push, newline = context.newline, indent = context.indent, deindent = context.deindent, runtimeGlobalName = context.runtimeGlobalName;
+        genFunctionPreamble(context);
+        push("function render(_ctx, _cache){");
+        indent();
+        // push(`with(_ctx){`)
+        // indent()
+        var hasHelpers = ast.helpers.length > 0;
+        if (hasHelpers) {
+            var varStrs = ast.helpers.map(aliasHelper).join(',');
+            push("const { ".concat(varStrs, " } = _").concat(runtimeGlobalName));
+        }
+        newline();
+        push("return ");
+        // 还剩 _createElementVNode("div", [], ["hello world"])
+        if (ast.codegenNode) {
+            genNode(ast.codegenNode, context);
+        }
+        else {
+            push('null');
+        }
+        // deindent()
+        // push(`}`)
+        deindent();
+        push("}");
+        console.log(context.code);
+        return {
+            ast: ast,
+            code: context.code
+        };
+    }
+    function createCodegenContext(ast) {
+        var context = {
+            code: "",
+            runtimeGlobalName: 'Vue',
+            source: ast.loc.source,
+            indentLevel: 0,
+            helper: function (key) {
+                return "_".concat(helperNameMap[key]);
+            },
+            push: function (code) {
+                context.code += code;
+            },
+            newline: function () {
+                newline(context.indentLevel);
+            },
+            // 增加锁进+换行
+            indent: function () {
+                newline(++context.indentLevel);
+            },
+            // 减少锁进和换行
+            deindent: function () {
+                newline(--context.indentLevel);
+            }
+        };
+        function newline(n) {
+            context.code += "\n" + " ".repeat(n);
+        }
+        return context;
+    }
+    function genFunctionPreamble(context) {
+        var push = context.push, newline = context.newline, runtimeGlobalName = context.runtimeGlobalName;
+        push("const _".concat(runtimeGlobalName, " = ").concat(runtimeGlobalName));
+        newline();
+        push('return ');
+    }
+    function genNode(node, context) {
+        switch (node.type) {
+            case 13 /* NodeTypes.VNODE_CALL */: // 13
+                genVNodeCall(node, context);
+                break;
+            case 1 /* NodeTypes.ELEMENT */: // 1
+                genNode(node.codegenNode, context);
+                break;
+            case 2 /* NodeTypes.TEXT */:
+                genText(node, context);
+        }
+    }
+    function genVNodeCall(node, context) {
+        var push = context.push, helper = context.helper;
+        var tag = node.tag, props = node.props, children = node.children, isComponent = node.isComponent;
+        var callHelper = isComponent ? CREATE_VNODE : CREATE_ELEMENT_VNODE;
+        push("".concat(helper(callHelper), "("));
+        var args = [tag, props, children].map(function (arg) { return arg || null; });
+        genNodeList(args, context);
+        // todo
+        push(")");
+    }
+    function genText(node, context) {
+        context.push(JSON.stringify(node.content));
+    }
+    function genNodeList(nodes, context) {
+        var push = context.push;
+        for (var i = 0; i < nodes.length; i++) {
+            var node = nodes[i];
+            if (typeof node === 'string') {
+                push(node);
+            }
+            else if (Array.isArray(node)) {
+                context.push("[");
+                genNodeList(node, context);
+                context.push("]");
+            }
+            else {
+                genNode(node, context);
+            }
+            if (i < nodes.length - 1) {
+                push(', ');
+            }
+        }
+    }
+
     function baseCompile(template, options) {
         if (options === void 0) { options = {}; }
+        console.log('baseCompile', template);
         var ast = baseParse(template);
         transform(ast, Object.assign(options, {
             nodeTransforms: [transformElement, transformText]
         }));
-        console.log(JSON.stringify(ast));
-        return {};
+        // console.log(JSON.stringify(ast))
+        var code = generate(ast).code;
+        return new Function(code)();
     }
 
     function compile(template, options) {
@@ -1471,11 +1597,15 @@ var Vue = (function (exports) {
     exports.ReactiveEffect = ReactiveEffect;
     exports.Text = Text;
     exports.baseCompile = baseCompile;
+    exports.baseParse = baseParse;
     exports.compile = compile;
     exports.computed = computed;
+    exports.createCompoundExpression = createCompoundExpression;
     exports.createElementVNode = createVNode;
     exports.createRenderer = createRenderer;
+    exports.createRoot = createRoot;
     exports.createVNode = createVNode;
+    exports.createVNodeCall = createVNodeCall;
     exports.effect = effect;
     exports.h = h;
     exports.isObject = isObject;

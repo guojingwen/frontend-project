@@ -95,7 +95,7 @@ export function createRenderer(options?: RendererOptions) {
   ) {
     const componentUpdateFn = () => {
       if (!instance.isMounted) {
-        const { render, data, beforeMount, mounted } = instance
+        const { render, data = {}, beforeMount, mounted } = instance
 
         if (beforeMount) {
           callHook(beforeMount, instance.data)

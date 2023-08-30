@@ -2,8 +2,10 @@ import { baseParse } from './parse'
 import { transform } from './transform'
 import { transformElement } from './transforms/transformElements'
 import { transformText } from './transforms/transformText'
+import { generate } from './codegen'
 
 export function baseCompile(template: string, options = {}) {
+  console.log('baseCompile', template)
   const ast = baseParse(template)
   transform(
     ast,
@@ -12,5 +14,6 @@ export function baseCompile(template: string, options = {}) {
     })
   )
   // console.log(JSON.stringify(ast))
-  // return generate(ast)
+  const { code } = generate(ast)
+  return new Function(code)()
 }
