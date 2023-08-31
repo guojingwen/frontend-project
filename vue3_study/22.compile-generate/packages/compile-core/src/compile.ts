@@ -1,7 +1,6 @@
 import { baseParse } from './parse'
 import { transform } from './transform'
 import { transformElement } from './transforms/transformElements'
-import { transformText } from './transforms/transformText'
 import { generate } from './codegen'
 
 export function baseCompile(template: string, options = {}) {
@@ -9,7 +8,7 @@ export function baseCompile(template: string, options = {}) {
   transform(
     ast,
     Object.assign(options, {
-      nodeTransforms: [transformElement, transformText]
+      nodeTransforms: [transformElement]
     })
   )
   // console.log(JSON.stringify(ast))

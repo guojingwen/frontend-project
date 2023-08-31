@@ -1229,14 +1229,11 @@ var Vue = (function (exports) {
         };
     }
     function parseText(context) {
-        var endTokens = ['<', '{{'];
+        var endToken = '<';
         var endIndex = context.source.length;
-        for (var i = 0; i < endTokens.length; i++) {
-            var index = context.source.indexOf(endTokens[i], 1);
-            if (index !== -1 && endIndex > index) {
-                endIndex = index;
-                break;
-            }
+        var index = context.source.indexOf(endToken, 1);
+        if (index !== -1 && endIndex > index) {
+            endIndex = index;
         }
         var content = parseTextData(context, endIndex);
         return {
@@ -1278,7 +1275,8 @@ var Vue = (function (exports) {
     }
 
     function baseCompile(template, options) {
-        baseParse(template);
+        var ast = baseParse(template);
+        console.log(ast);
         /* transform(
           ast,
           Object.assign(options, {

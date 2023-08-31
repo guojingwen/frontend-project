@@ -13,9 +13,10 @@
   <div id="app"></div>
   <script>
     const { compile, h, render } = Vue
-    const renderFn = compile(template)
     const component = {
-      render: compile(`<div>hello world</div>`)
+      render: compile(`<div>
+          <h2>hello world</h2>
+        </div>`)
     }
     const vnode = h(component);
     // render(vnode, document.getElementById('app'))

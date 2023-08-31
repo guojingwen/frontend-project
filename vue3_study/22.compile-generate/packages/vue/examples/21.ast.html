@@ -14,9 +14,11 @@
   <script>
     const { compile, h, render } = Vue
     const component = {
-      render: compile(`<div><h2>hello world</h2></div>`)
+      render: compile(`<div>
+          <h2>hello world</h2>
+        </div>`)
     }
-    // const vnode = h(component);
+    const vnode = h(component);
     // render(vnode, document.getElementById('app'))
   </script>
 </body>

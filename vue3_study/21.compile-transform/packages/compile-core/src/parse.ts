@@ -76,14 +76,11 @@ function parseTag(context: ParserContext, type: TagType) {
   }
 }
 function parseText(context: ParserContext) {
-  const endTokens = ['<', '{{']
+  const endToken = '<'
   let endIndex = context.source.length
-  for (let i = 0; i < endTokens.length; i++) {
-    const index = context.source.indexOf(endTokens[i], 1)
-    if (index !== -1 && endIndex > index) {
-      endIndex = index
-      break
-    }
+  const index = context.source.indexOf(endToken, 1)
+  if (index !== -1 && endIndex > index) {
+    endIndex = index
   }
   const content = parseTextData(context, endIndex)
   return {

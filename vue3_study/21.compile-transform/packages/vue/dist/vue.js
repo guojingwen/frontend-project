@@ -1172,14 +1172,11 @@ var Vue = (function (exports) {
     }
 
     function baseParse(content) {
-        var context = createParserContent(content);
-        var children = parseChildren(context, []);
-        return createRoot(children);
-    }
-    function createParserContent(content) {
-        return {
+        var context = {
             source: content
         };
+        var children = parseChildren(context, []);
+        return createRoot(children);
     }
     function createRoot(children) {
         return {
@@ -1232,14 +1229,11 @@ var Vue = (function (exports) {
         };
     }
     function parseText(context) {
-        var endTokens = ['<', '{{'];
+        var endToken = '<';
         var endIndex = context.source.length;
-        for (var i = 0; i < endTokens.length; i++) {
-            var index = context.source.indexOf(endTokens[i], 1);
-            if (index !== -1 && endIndex > index) {
-                endIndex = index;
-                break;
-            }
+        var index = context.source.indexOf(endToken, 1);
+        if (index !== -1 && endIndex > index) {
+            endIndex = index;
         }
         var content = parseTextData(context, endIndex);
         return {
@@ -1287,6 +1281,8 @@ var Vue = (function (exports) {
 
     function createTransformContext(root, _a) {
         var _b = _a.nodeTransforms, nodeTransforms = _b === void 0 ? [] : _b;
+        // 记录AST --> JS AST 转换过程的状态
+        // 会不断访问和修改该对象下的属性
         var context = {
             nodeTransforms: nodeTransforms,
             root: root,
@@ -1307,12 +1303,13 @@ var Vue = (function (exports) {
         traverseNode(root, context);
         createRootCodegen(root);
         root.helpers = __spreadArray([], __read(context.helpers.keys()), false);
-        root.components = [];
-        root.directives = [];
-        root.imports = [];
-        root.hoists = [];
-        root.temps = [];
-        root.cached = [];
+        // 这些属性本阶段用不到还是注释吧，方面上手
+        /* root.components = []
+        root.directives = []
+        root.imports = []
+        root.hoists = []
+        root.temps = []
+        root.cached = [] */
     }
     function traverseNode(node, context) {
         context.currentNode = node;
@@ -1348,7 +1345,6 @@ var Vue = (function (exports) {
     function createRootCodegen(root) {
         var children = root.children;
         // Vue2 仅支持单个根节点
-        debugger;
         if (children.length === 1) {
             var child = children[0];
             if (isSingleElementRoot(root, child) && child.codegenNode) {
@@ -1358,28 +1354,22 @@ var Vue = (function (exports) {
     }
 
     var _a;
-    var CREATE_ELEMENT_VNODE = Symbol('createElementNode');
+    var CREATE_ELEMENT_VNODE = Symbol('createElementVNode');
     var CREATE_VNODE = Symbol('createVNode');
     (_a = {},
-        _a[CREATE_ELEMENT_VNODE] = 'createElementNode',
+        _a[CREATE_ELEMENT_VNODE] = 'createElementVNode',
         _a[CREATE_VNODE] = 'createVNode',
         _a);
 
     function createVNodeCall(context, tag, props, children) {
         if (context) {
+            // 往Map对象context.helper中函数标志，在generate阶段使用
             context.helper(CREATE_ELEMENT_VNODE);
         }
         return {
             type: 13 /* NodeTypes.VNODE_CALL */,
             tag: tag,
             props: props,
-            children: children
-        };
-    }
-    function createCompoundExpression(children, loc) {
-        return {
-            type: 8 /* NodeTypes.COMPOUND_EXPRESSION */,
-            loc: loc,
             children: children
         };
     }
@@ -1398,68 +1388,14 @@ var Vue = (function (exports) {
         };
     };
 
-    function isText(node) {
-        return [5 /* NodeTypes.INTERPOLATION */, 2 /* NodeTypes.TEXT */].includes(node.type);
-    }
-
-    /**
-     * 将相邻的文本节点和表达式合并为一个表达式。
-     *
-     * 例如:
-     * <div>hello {{ msg }}</div>
-     * 上述模板包含两个节点：
-     * 1. hello：TEXT 文本节点
-     * 2. {{ msg }}：INTERPOLATION 表达式节点
-     * 这两个节点在生成 render 函数时，需要被合并： 'hello' + _toDisplayString(_ctx.msg)
-     * 那么在合并时就要多出来这个 + 加号。
-     * 例如：
-     * children:[
-     * 	{ TEXT 文本节点 },
-     *  " + ",
-     *  { INTERPOLATION 表达式节点 }
-     * ]
-     */
-    var transformText = function (node, context) {
-        if ([
-            0 /* NodeTypes.ROOT */,
-            1 /* NodeTypes.ELEMENT */,
-            11 /* NodeTypes.FOR */,
-            10 /* NodeTypes.IF_BRANCH */
-        ].includes(node.type)) {
-            return function () {
-                var children = node.children;
-                var currentContainer;
-                for (var i = 0; i < children.length; i++) {
-                    var child = children[i];
-                    if (!isText(child)) {
-                        continue;
-                    }
-                    for (var j = i + 1; j < children.length; j++) {
-                        var next = children[j];
-                        if (!isText(next)) {
-                            currentContainer = undefined;
-                            break;
-                        }
-                        if (!currentContainer) {
-                            currentContainer = children[i] = createCompoundExpression([child], child.loc);
-                        }
-                        currentContainer.children.push(" + ", next);
-                        children.splice(j, i);
-                        j--;
-                    }
-                }
-            };
-        }
-    };
-
     function baseCompile(template, options) {
         if (options === void 0) { options = {}; }
         var ast = baseParse(template);
         transform(ast, Object.assign(options, {
-            nodeTransforms: [transformElement, transformText]
+            nodeTransforms: [transformElement]
         }));
-        console.log(JSON.stringify(ast));
-        return {};
+        // console.log(JSON.stringify(ast))
+        // return generate(ast)
     }
 
     function compile(template, options) {
@@ -1471,11 +1407,14 @@ var Vue = (function (exports) {
     exports.ReactiveEffect = ReactiveEffect;
     exports.Text = Text;
     exports.baseCompile = baseCompile;
+    exports.baseParse = baseParse;
     exports.compile = compile;
     exports.computed = computed;
     exports.createElementVNode = createVNode;
     exports.createRenderer = createRenderer;
+    exports.createRoot = createRoot;
     exports.createVNode = createVNode;
+    exports.createVNodeCall = createVNodeCall;
     exports.effect = effect;
     exports.h = h;
     exports.isObject = isObject;
