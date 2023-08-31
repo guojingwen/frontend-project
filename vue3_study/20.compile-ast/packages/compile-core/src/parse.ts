@@ -1,5 +1,6 @@
 import { ElementTypes, NodeTypes } from './ast'
 
+// ElementTypes、NodeTypes 是两个常数枚举，copy自源码
 export function baseParse(content: string) {
   const context: ParserContext = {
     source: content
