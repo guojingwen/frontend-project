@@ -23,7 +23,7 @@ export function createComponentInstance(vnode): ComponentInstance {
     update: null, // update 函数，触发 effect.run
     render: null, // 组件内的 render 函数
     isMounted: false,
-    data: null,
+    data: {},
     // 生命周期相关
     beforeCreate,
     created,

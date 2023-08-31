@@ -27,8 +27,8 @@ export function generate(ast) {
   push(`function render(_ctx, _cache){`)
   indent()
 
-  // push(`with(_ctx){`)
-  // indent()
+  push(`with(_ctx){`)
+  indent()
 
   const hasHelpers = ast.helpers.length > 0
   if (hasHelpers) {
@@ -45,8 +45,8 @@ export function generate(ast) {
     push('null')
   }
 
-  // deindent()
-  // push(`}`)
+  deindent()
+  push(`}`)
 
   deindent()
   push(`}`)
@@ -115,7 +115,6 @@ function genVNodeCall(node, context) {
   push(`${helper(callHelper)}(`)
   const args = [tag, props, children].map(arg => arg || null)
   genNodeList(args, context)
-  // todo
   push(`)`)
 }
 

@@ -18,7 +18,12 @@
         children: [
           /* 这里的东西不需要关注了 */
         ],
-        codegenNode: {}
+        codegenNode: {
+          type: 13,
+          tag: '\\"h2\\"',
+          props: [],
+          children: [{ type: 2, content: 'hello world' }]
+        }
       },
       { type: 2, content: '\\n    ' }
     ]

@@ -506,7 +506,7 @@ var Vue = (function (exports) {
             update: null,
             render: null,
             isMounted: false,
-            data: null,
+            data: {},
             // 生命周期相关
             beforeCreate: beforeCreate,
             created: created,
@@ -618,7 +618,7 @@ var Vue = (function (exports) {
         function setupRenderEffect(instance, initialVNode, container, anchor) {
             var componentUpdateFn = function () {
                 if (!instance.isMounted) {
-                    var render_1 = instance.render, _a = instance.data, data = _a === void 0 ? {} : _a, beforeMount = instance.beforeMount, mounted = instance.mounted;
+                    var render_1 = instance.render, data = instance.data, beforeMount = instance.beforeMount, mounted = instance.mounted;
                     if (beforeMount) {
                         callHook(beforeMount, instance.data);
                     }
@@ -1171,6 +1171,7 @@ var Vue = (function (exports) {
         return renderer.render.apply(renderer, __spreadArray([], __read(args), false));
     }
 
+    // ElementTypes、NodeTypes 是两个常数枚举，copy自源码
     function baseParse(content) {
         var context = {
             source: content
@@ -1409,8 +1410,8 @@ var Vue = (function (exports) {
         genFunctionPreamble(context);
         push("function render(_ctx, _cache){");
         indent();
-        // push(`with(_ctx){`)
-        // indent()
+        push("with(_ctx){");
+        indent();
         var hasHelpers = ast.helpers.length > 0;
         if (hasHelpers) {
             var varStrs = ast.helpers.map(aliasHelper).join(',');
@@ -1425,8 +1426,8 @@ var Vue = (function (exports) {
         else {
             push('null');
         }
-        // deindent()
-        // push(`}`)
+        deindent();
+        push("}");
         deindent();
         push("}");
         console.log(context.code);
@@ -1489,7 +1490,6 @@ var Vue = (function (exports) {
         push("".concat(helper(callHelper), "("));
         var args = [tag, props, children].map(function (arg) { return arg || null; });
         genNodeList(args, context);
-        // todo
         push(")");
     }
     function genText(node, context) {
