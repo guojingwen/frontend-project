@@ -1,0 +1,33 @@
+;({
+  type: 0,
+  children: [
+    /* 这里的东西不需要关注了 */
+  ],
+  loc: {},
+  codegenNode: {
+    type: 13,
+    tag: '\\"div\\"',
+    props: [],
+    children: [
+      { type: 2, content: '\\n        ' },
+      {
+        type: 1,
+        tag: 'h2',
+        tagType: 0,
+        props: [],
+        children: [
+          /* 这里的东西不需要关注了 */
+        ],
+        codegenNode: {}
+      },
+      { type: 2, content: '\\n    ' }
+    ]
+  },
+  helpers: [null], // 把null 替换为 CREATE_ELEMENT_VNODE
+  components: [],
+  directives: [],
+  imports: [],
+  hoists: [],
+  temps: [],
+  cached: []
+})

@@ -1564,44 +1564,19 @@ var Vue = (function (exports) {
         newline();
         push('return ');
     }
-    function genNode(node, context) {
-        switch (node.type) {
-            case 13 /* NodeTypes.VNODE_CALL */: // 13
-                genVNodeCall(node, context);
-                break;
-            case 1 /* NodeTypes.ELEMENT */: // 1
-                genNode(node.codegenNode, context);
-                break;
-            case 2 /* NodeTypes.TEXT */:
-                genText(node, context);
-                break;
-            // 复合表达式处理
-            case 4 /* NodeTypes.SIMPLE_EXPRESSION */:
-                genExpression(node, context);
-                break;
-            // 表达式处理
-            case 5 /* NodeTypes.INTERPOLATION */:
-                genInterpolation(node, context);
-                break;
-            // {{}} 处理
-            case 8 /* NodeTypes.COMPOUND_EXPRESSION */:
-                genCompoundExpression(node, context);
-                break;
-        }
+    // 表达式处理  4
+    function genExpression(node, context) {
+        var content = node.content, isStatic = node.isStatic;
+        context.push(isStatic ? JSON.stringify(content) : content, node);
     }
-    /**
-     * {{}} 处理
-     */
+    // {{}} 处理 5
     function genInterpolation(node, context) {
         var push = context.push, helper = context.helper;
         push("".concat(helper(TO_DISPLAY_STRING), "("));
-        // genText(node.content, context)
         genNode(node.content, context);
         push(")");
     }
-    /**
-     * 复合表达式处理
-     */
+    // 复合表达式处理 8
     function genCompoundExpression(node, context) {
         for (var i = 0; i < node.children.length; i++) {
             var child = node.children[i];
@@ -1613,12 +1588,30 @@ var Vue = (function (exports) {
             }
         }
     }
-    /**
-     * 表达式处理
-     */
-    function genExpression(node, context) {
-        var content = node.content, isStatic = node.isStatic;
-        context.push(isStatic ? JSON.stringify(content) : content, node);
+    function genNode(node, context) {
+        switch (node.type) {
+            case 13 /* NodeTypes.VNODE_CALL */: // 13
+                genVNodeCall(node, context);
+                break;
+            case 1 /* NodeTypes.ELEMENT */: // 1
+                genNode(node.codegenNode, context);
+                break;
+            case 2 /* NodeTypes.TEXT */: // 2
+                genText(node, context);
+                break;
+            // 复合表达式处理 4
+            case 4 /* NodeTypes.SIMPLE_EXPRESSION */:
+                genExpression(node, context);
+                break;
+            // 表达式处理 5
+            case 5 /* NodeTypes.INTERPOLATION */:
+                genInterpolation(node, context);
+                break;
+            // {{}} 处理 8
+            case 8 /* NodeTypes.COMPOUND_EXPRESSION */:
+                genCompoundExpression(node, context);
+                break;
+        }
     }
     function genVNodeCall(node, context) {
         var push = context.push, helper = context.helper;
