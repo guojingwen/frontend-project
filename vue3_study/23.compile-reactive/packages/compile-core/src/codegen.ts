@@ -2,7 +2,8 @@ import { NodeTypes } from './ast'
 import {
   CREATE_ELEMENT_VNODE,
   CREATE_VNODE,
-  helperNameMap
+  helperNameMap,
+  TO_DISPLAY_STRING
 } from './runtimeHelpers'
 
 /**
@@ -95,6 +96,30 @@ function genFunctionPreamble(context) {
   push('return ')
 }
 
+// 表达式处理  4
+function genExpression(node, context) {
+  const { content, isStatic } = node
+  context.push(isStatic ? JSON.stringify(content) : content, node)
+}
+// {{}} 处理 5
+function genInterpolation(node, context) {
+  const { push, helper } = context
+  push(`${helper(TO_DISPLAY_STRING)}(`)
+  genNode(node.content, context)
+  push(`)`)
+}
+// 复合表达式处理 8
+function genCompoundExpression(node, context) {
+  for (let i = 0; i < node.children!.length; i++) {
+    const child = node.children![i]
+    if (typeof child === 'string') {
+      context.push(child)
+    } else {
+      genNode(child, context)
+    }
+  }
+}
+
 function genNode(node, context) {
   switch (node.type) {
     case NodeTypes.VNODE_CALL: // 13
@@ -105,6 +130,19 @@ function genNode(node, context) {
       break
     case NodeTypes.TEXT: // 2
       genText(node, context)
+      break
+    // 复合表达式处理 4
+    case NodeTypes.SIMPLE_EXPRESSION:
+      genExpression(node, context)
+      break
+    // 表达式处理 5
+    case NodeTypes.INTERPOLATION:
+      genInterpolation(node, context)
+      break
+    // {{}} 处理 8
+    case NodeTypes.COMPOUND_EXPRESSION:
+      genCompoundExpression(node, context)
+      break
   }
 }
 
