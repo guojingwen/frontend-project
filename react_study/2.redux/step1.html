@@ -14,7 +14,7 @@
   <body>
     <div id="root"></div>
     <script type="text/babel">
-      function counterReducer(state = 0, action) {
+      function counter(state = 0, action) {
         switch (action.type) {
           case "ADD":
             return state + 1;
@@ -24,12 +24,12 @@
             return state;
         }
       }
-      window.store = Redux.createStore(
-        counterReducer,
+      // const store = Redux.createStore(counter);
+      const store = Redux.createStore(
+        counter,
         Redux.applyMiddleware(ReduxThunk)
       );
-      console.log(store);
-      const root = ReactDOM.createRoot(document.getElementById("root"));
+
       class App extends React.Component {
         constructor(props) {
           super(props);
@@ -38,13 +38,13 @@
         componentDidMount() {
           store.subscribe(() => this.forceUpdate());
         }
-        asyncAdd = () => {
+        asyncAdd() {
           store.dispatch((dispatch) => {
             setTimeout(() => {
               dispatch({ type: "ADD" });
-            }, 1000);
+            }, 500);
           });
-        };
+        }
         render() {
           return (
             <div>
@@ -52,11 +52,12 @@
               <button onClick={() => store.dispatch({ type: "ADD" })}>
                 ADD
               </button>
-              <button onClick={this.asyncAdd}>asyncAdd</button>
+              <button onClick={() => this.asyncAdd()}>asyncAdd</button>
             </div>
           );
         }
       }
+      const root = ReactDOM.createRoot(document.getElementById("root"));
       root.render(<App />);
     </script>
   </body>
