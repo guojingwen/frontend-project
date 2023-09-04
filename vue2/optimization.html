@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	<script src="./vue.dev.js"></script>
+
+</head>
+<body>
+	<div id="app">
+	</div>
+	<script>
+		const {component} = Vue;
+		const comp = {
+			template: `<h2>{{title}}</h2>`,
+			props: ['title']
+		}
+		window.app = new Vue({
+			// el: '#app',
+			// render(h) {
+			// 	return h('div', 'sss')
+			// },
+			template: `<div id="app">
+		<li v-for="todo in todos" :class="todo.className">
+      {{ todo.text }}
+    </li>
+		<my-comp :title="title"></my-comp>
+	</div>`,
+			data: {
+				title: 'AAA',
+				todos: [
+					{ text: '学习 JavaScript', className: 'aaa' },
+					{ text: '学习 Vue' },
+					{ text: '整个牛项目' }
+				]
+			},
+			components: {
+				'my-comp' : comp
+			},
+			async created() {
+				setTimeout(() => {
+					this.title = 'BBB'
+				}, 2000);
+			},
+			mounted() {
+				console.log('mounted', this, window.app);
+			}
+		}).$mount('#app')
+	</script>
+</body>
+</html>

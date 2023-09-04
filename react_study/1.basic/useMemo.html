@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>useMemo</title>
+    <script src="../node_modules/react/umd/react.development.js"></script>
+    <script src="../node_modules/react-dom/umd/react-dom.development.js"></script>
+    <script src="../babel.min.js"></script>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+  const {useState, useMemo} = React;
+
+  function UseMemoUsage() {
+    const [count, setCount] = useState(0);
+    const [text, setText] = useState('');
+
+    const expensive = React.useMemo(() => {
+      console.log("compute"); // 输入框 value 改变 也会触发
+      let sum = 0;
+      for (let i = 0; i < count; i++) {
+        sum += i;
+      }
+      return sum;
+    }, [count])
+
+    return (
+      <div>
+        <p>{count} -- {expensive} </p>
+        <button onClick={() => setCount(count + 1)}>ADD</button>
+        <input type="text" defaultValue={text}  placeholder='试试输入内容' onInput={e => {
+          setText(e.target.value)
+        }}/>
+      </div>
+    );
+  }
+  
+</script>
+<script type="text/babel">
+	const root = ReactDOM.createRoot(document.getElementById('root'));
+  root.render(<UseMemoUsage />);
+</script>
+</body>
+</html>

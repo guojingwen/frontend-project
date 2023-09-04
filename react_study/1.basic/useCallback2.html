@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>useCallback</title>
+    <script src="../node_modules/react/umd/react.development.js"></script>
+    <script src="../node_modules/react-dom/umd/react-dom.development.js"></script>
+    <script src="../babel.min.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/babel"></script>
+<script type="text/babel">
+const { useState, useCallback } = React;
+
+const NewChild = React.memo(Child);
+function UseCallBackUsage() {
+  const [value, setValue] = useState({ text: "" });
+  console.log("父组件渲染");
+  const onChange = (e) => {
+    setValue({
+      text: e.target.value,
+    });
+  };
+  return (
+    <div>
+      <p>{value.text}</p>
+      <input
+        type="text"
+        placeholder="输入内容试试看"
+        value={value.text}
+        onChange={onChange}
+      />
+      <hr />
+      <NewChild />
+    </div>
+  );
+}
+function Child(props) {
+  // 父组件setState会触发子组件渲染
+  console.log("子组件渲染");
+  return (
+    <div>
+      <span>子组件</span>
+    </div>
+  );
+}
+</script>
+    <script type="text/babel">
+      const root = ReactDOM.createRoot(document.getElementById("root"));
+      root.render(<UseCallBackUsage />);
+    </script>
+  </body>
+</html>

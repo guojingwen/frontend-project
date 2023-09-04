@@ -1,45 +1,50 @@
 import React, { useCallback, useState } from 'react';
 
+const useGetState = (initVal) => {
+  const [state, setState] = useState(initVal);
+  const ref = React.useRef(initVal);
+  const _setState = (newVal) => {
+    ref.current = newVal;
+    setState(newVal)
+  }
+  const getState = () => {
+    return ref.current;
+  }
+  return [state, _setState, getState];
+}
 const NewChild = React.memo(Child);
 export default function UseCallBackUsage() {
-  const [count, setCount] = useState(0);
-  const [value, setValue] = useState('');
-
-  // 输入框改变，子组件会重新渲染
-  // const getSum = () => {
-  //   let sum = 0;
-  //   for(let i=0; i<=count; i++) {
-  //     sum += count;
-  //   }
-  //   return sum;
-  // }
-
-  // 输入框改变， 子组件不再被渲染
-  const getSum = useCallback(() => {
-    let sum = 0;
-    for(let i=0; i<=count; i++) {
-      sum += count;
-    }
-    return sum;
+  const [value, setValue] = useState({ text: "" });
+  const getValue = useCallback(() => {
+    console.log(value.text);
   }, []);
-  
-  console.log('父组件渲染')
+  console.log("父组件渲染");
+  const onChange = (e) => {
+    setValue({
+      text: e.target.value,
+    });
+  };
   return (
     <div>
-      <p>{value}</p>
-      <input type="text" placeholder='输入内容试试看' value={value}
-      onChange={e => setValue(e.target.value)}/>
-      <p>{count}</p>
-      <button onClick={() => setCount(count + 1)}>ADD</button>
-      <NewChild getSum={getSum}></NewChild>
+      <p>{value.text}</p>
+      <input
+        type="text"
+        placeholder="输入内容试试看"
+        value={value.text}
+        onChange={onChange}
+      />
+      <hr />
+      <NewChild getValue={getValue} />
     </div>
-  )
+  );
 }
-
 function Child(props) {
-  console.log('子组件渲染')
-  return <div style={{border: '1px solid #ddd', marginTop: '10px'}}>
-    <span>{props.title}</span>
-    <button onClick={() => console.log(props.getSum())}>getSum()</button>
-  </div>
+  // 父组件setState会触发子组件渲染
+  console.log("子组件渲染");
+  return (
+    <div>
+      <span>子组件</span>
+      <button onClick={props.getValue}>getValue()</button>
+    </div>
+  );
 }

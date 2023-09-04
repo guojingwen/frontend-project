@@ -27,6 +27,6 @@ export default class PureCompUsage extends PureComponent {
 /**
  * 如果function组件怎么避免不必要的渲染呢？
  * - 如果是state，我们判断是否需要setState
- * - 如果是props，则使用useMemo const NewChild = React.useMemo(Child);
+ * - 如果是props，则使用memo const NewChild = React.memo(Child);
  */
 
