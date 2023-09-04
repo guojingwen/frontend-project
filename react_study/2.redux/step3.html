@@ -1,96 +1,101 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <script src="../node_modules/react/umd/react.development.js"></script>
     <script src="../node_modules/react-dom/umd/react-dom.development.js"></script>
     <!-- <script src="../node_modules/redux/dist/redux.js"></script> -->
     <!-- <script src="../node_modules/redux-thunk/dist/redux-thunk.js"></script> -->
     <script src="../babel.min.js"></script>
-</head>
-<body>
+  </head>
+  <body>
     <div id="root"></div>
     <script>
-        function createStore(reducer, enhancer) {
-            if(enhancer) return enhancer(createStore)(reducer);
+      function createStore(reducer, enhancer) {
+        if (enhancer) return enhancer(createStore)(reducer);
 
-            let currentState;
-            function getState () {
-                return currentState;
-            }
-            const listeners = [];
-            function subscribe (listener) {
-                listeners.push(listener);
-            }
-            function dispatch (action) {
-                currentState = reducer(currentState, action);
-                listeners.forEach(listener => listener());
-            }
-            dispatch({type: '@init'});
-            return {
-                dispatch,
-                getState,
-                subscribe,
-            }
+        let currentState;
+        function getState() {
+          return currentState;
         }
-        function applyMiddleware(...middlewares) {
-            return createStore => reducer => {
-                const store = createStore(reducer);
-                return {
-                    ...store,
-                }
-            }
+        const listeners = [];
+        function subscribe(listener) {
+          listeners.push(listener);
         }
-        window.Redux = {
-            createStore,
-            applyMiddleware,
+        function dispatch(action) {
+          currentState = reducer(currentState, action);
+          listeners.forEach((listener) => listener());
         }
-        function ReduxThunk () {
-
-        }
+        dispatch({ type: "@init" });
+        return {
+          dispatch,
+          getState,
+          subscribe,
+        };
+      }
+      function applyMiddleware(...middlewares) {
+        return (createStore) => (reducer) => {
+          const store = createStore(reducer);
+          return {
+            ...store,
+          };
+        };
+      }
+      window.Redux = {
+        createStore,
+        applyMiddleware,
+      };
+      function ReduxThunk() {}
     </script>
     <script type="text/babel">
-        function counter(state = 0, action) {
-            switch(action.type) {
-                case 'ADD': 
-                    return state + 1;
-                case 'MINUS':
-                    return state - 1;
-                default: 
-                    return state
-            }
+      function counter(state = 0, action) {
+        switch (action.type) {
+          case "ADD":
+            return state + 1;
+          case "MINUS":
+            return state - 1;
+          default:
+            return state;
         }
-        // const store = Redux.createStore(counter);
-        const store = Redux.createStore(counter, Redux.applyMiddleware(ReduxThunk));
-        
-        class App extends React.Component {
-            constructor(props) {
-                super(props);
-                this.state = {};
-            }
-            componentDidMount() {
-                store.subscribe(() => this.forceUpdate());
-            }
-            asyncAdd () {
-                store.dispatch(dispatch => {
-                    setTimeout(() => {
-                        dispatch({type: 'ADD'})
-                    }, 500)
-                })
-            }
-            render() {
-                return <div>
-                    <p>{store.getState()}</p>
-                    <button onClick={() => store.dispatch({type: 'ADD'})}>ADD</button>
-                    <button onClick={() => this.asyncAdd()}>asyncAdd</button>
-                </div>
-            }
+      }
+      // const store = Redux.createStore(counter);
+      const store = Redux.createStore(
+        counter,
+        Redux.applyMiddleware(ReduxThunk)
+      );
+
+      class App extends React.Component {
+        constructor(props) {
+          super(props);
+          this.state = {};
         }
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<App/>);
+        componentDidMount() {
+          store.subscribe(() => this.forceUpdate());
+        }
+        asyncAdd() {
+          store.dispatch((dispatch) => {
+            setTimeout(() => {
+              dispatch({ type: "ADD" });
+            }, 500);
+          });
+        }
+        render() {
+          return (
+            <div>
+              <p>{store.getState()}</p>
+              <button onClick={() => store.dispatch({ type: "ADD" })}>
+                ADD
+              </button>
+              <button onClick={() => this.asyncAdd()}>asyncAdd</button>
+            </div>
+          );
+        }
+      }
+      const root = ReactDOM.createRoot(document.getElementById("root"));
+      root.render(<App />);
     </script>
-</body>
+  </body>
 </html>

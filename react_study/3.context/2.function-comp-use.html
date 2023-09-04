@@ -1,66 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <script src="../node_modules/react/umd/react.development.js"></script>
     <script src="../node_modules/react-dom/umd/react-dom.development.js"></script>
     <script src="../babel.min.js"></script>
-</head>
-<body>
+  </head>
+  <body>
     <div id="root"></div>
     <script type="text/babel">
-        const ThemeContext = React.createContext('light');
-        // class 组件用法
-        // class Ancestor extends React.Component {
-        //     constructor(props) {
-        //         super(props);
-        //         this.state = {
-        //             color: 'yellow'
-        //         }
-        //     }
-        //     changeColor = () => {
-        //         const color = this.state.color === 'yellow' ? 'blue' : 'yellow';
-        //         this.setState({
-        //             color
-        //         })
-        //     }
-        //     render() {
-        //         const {color} = this.state;
-        //         return <div>
-        //             <ThemeContext.Provider value={color}>
-        //                 <button onClick={() => this.changeColor()}>修改颜色</button>
-        //                 <Parent></Parent>
-        //             </ThemeContext.Provider>
-        //         </div>
-        //     }
-        // }
-        function Ancestor() {
-            const [color, setColor] = React.useState('yellow');
+      const ThemeContext = React.createContext("light");
+      // class 组件用法
+      // class Ancestor extends React.Component {
+      //     constructor(props) {
+      //         super(props);
+      //         this.state = {
+      //             color: 'yellow'
+      //         }
+      //     }
+      //     changeColor = () => {
+      //         const color = this.state.color === 'yellow' ? 'blue' : 'yellow';
+      //         this.setState({
+      //             color
+      //         })
+      //     }
+      //     render() {
+      //         const {color} = this.state;
+      //         return <div>
+      //             <ThemeContext.Provider value={color}>
+      //                 <button onClick={() => this.changeColor()}>修改颜色</button>
+      //                 <Parent></Parent>
+      //             </ThemeContext.Provider>
+      //         </div>
+      //     }
+      // }
+      function Ancestor() {
+        const [color, setColor] = React.useState("yellow");
 
-            return <ThemeContext.Provider value={color}>
-                <button onClick={() => setColor(color === 'yellow' ? 'blue' : 'yellow')}>修改颜色</button>
-                <Parent></Parent>
-            </ThemeContext.Provider>
-        }
-        function Parent() {
-            return <Child/>
-        }
-        // class Child extends React.Component {
-        //     render() {
-        //         return <ThemeContext.Customer>
-        //             {backgroundColor => <p style={{backgroundColor}}>this is example of class context use</p>}
-        //         </ThemeContext.Customer>
-        //     }
-        // }
-        function Child() {
-            const backgroundColor = React.useContext(ThemeContext);
-            return <p style={{backgroundColor}}>this is example of function Component context use</p>
-        }
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<Ancestor/>);
+        return (
+          <ThemeContext.Provider value={color}>
+            <button
+              onClick={() => setColor(color === "yellow" ? "blue" : "yellow")}
+            >
+              修改颜色
+            </button>
+            <Parent></Parent>
+          </ThemeContext.Provider>
+        );
+      }
+      function Parent() {
+        return <Child />;
+      }
+      // class Child extends React.Component {
+      //     render() {
+      //         return <ThemeContext.Customer>
+      //             {backgroundColor => <p style={{backgroundColor}}>this is example of class context use</p>}
+      //         </ThemeContext.Customer>
+      //     }
+      // }
+      function Child() {
+        const backgroundColor = React.useContext(ThemeContext);
+        return (
+          <p style={{ backgroundColor }}>
+            this is example of function Component context use
+          </p>
+        );
+      }
+      const root = ReactDOM.createRoot(document.getElementById("root"));
+      root.render(<Ancestor />);
     </script>
-</body>
+  </body>
 </html>

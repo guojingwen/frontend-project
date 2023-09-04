@@ -1,109 +1,120 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <script src="../node_modules/react/umd/react.development.js"></script>
     <script src="../node_modules/react-dom/umd/react-dom.development.js"></script>
     <script src="../node_modules/redux/dist/redux.js"></script>
     <script src="../node_modules/react-redux/dist/react-redux.js"></script>
     <script src="../babel.min.js"></script>
-</head>
-<body>
+  </head>
+  <body>
     <div id="root"></div>
     <script type="text/babel">
-        /* React-redux 实现 */
-        const ReduxContext = React.createContext('XXX');
+      /* React-redux 实现 */
+      const ReduxContext = React.createContext("XXX");
 
-        function Provider(props) {
-            return <ReduxContext.Provider value={props.store}>
-                {props.children}
-            </ReduxContext.Provider>
-        }
-        // const connect = (mapStateToProps, mapDispatchToProps) => Comp => function Connect(props) {
-        //     const [val, setCounter] = React.useState(true);
-        //     const forceUpdate = () => setCounter(!val);
+      function Provider(props) {
+        return (
+          <ReduxContext.Provider value={props.store}>
+            {props.children}
+          </ReduxContext.Provider>
+        );
+      }
+      // const connect = (mapStateToProps, mapDispatchToProps) => Comp => function Connect(props) {
+      //     const [val, setCounter] = React.useState(true);
+      //     const forceUpdate = () => setCounter(!val);
 
-        //     React.useEffect(() => {
-        //         store.subscribe(() => forceUpdate());
-        //     }, []);
+      //     React.useEffect(() => {
+      //         store.subscribe(() => forceUpdate());
+      //     }, []);
 
-        //     return <ReduxContext.Consumer>
-        //         {store => <Comp 
-        //             {...mapStateToProps(store.getState())}
-        //             {...mapDispatchToProps(store.dispatch)}
-        //             {...props}>
-        //                 {props.children}
-        //         </Comp>}
-        //     </ReduxContext.Consumer>
-        // }
-        const connect = (mapStateToProps, mapDispatchToProps) => Comp => class Connect extends React.Component {
-            static contextType = ReduxContext;
-            constructor(props) {
-                super(props);
-                // console.log('Connect', props);
-            }
-            componentDidMount() {
-                this.context.subscribe(() => this.forceUpdate());
-            }
-            render() {
-                const {props} = this.props;
-                return <ReduxContext.Consumer>
-                    {
-                        store => <Comp 
-                        {...mapStateToProps(store.getState())}
-                        {...mapDispatchToProps(store.dispatch)}
-                        {...props}>
-                        </Comp>
-                    }
-                </ReduxContext.Consumer>
-            }
-        }
-        var ReactRedux = {
-            Provider,
-            connect
-        }
+      //     return <ReduxContext.Consumer>
+      //         {store => <Comp
+      //             {...mapStateToProps(store.getState())}
+      //             {...mapDispatchToProps(store.dispatch)}
+      //             {...props}>
+      //                 {props.children}
+      //         </Comp>}
+      //     </ReduxContext.Consumer>
+      // }
+      const connect = (mapStateToProps, mapDispatchToProps) => (Comp) =>
+        class Connect extends React.Component {
+          static contextType = ReduxContext;
+          constructor(props) {
+            super(props);
+            // console.log('Connect', props);
+          }
+          componentDidMount() {
+            this.context.subscribe(() => this.forceUpdate());
+          }
+          render() {
+            const { props } = this.props;
+            return (
+              <ReduxContext.Consumer>
+                {(store) => (
+                  <Comp
+                    {...mapStateToProps(store.getState())}
+                    {...mapDispatchToProps(store.dispatch)}
+                    {...props}
+                  ></Comp>
+                )}
+              </ReduxContext.Consumer>
+            );
+          }
+        };
+      var ReactRedux = {
+        Provider,
+        connect,
+      };
     </script>
     <script type="text/babel">
-        var Page = ReactRedux.connect(
-            /* mapStateToProps, */ state => ({counter: state.counter}),
-            /* mapDispatchToProps, */ dispatch => ({add: () => dispatch({type: 'ADD'})})
-        )(function (props) {
-            return <div>
-                <p>{props.counter}</p>
-                <button onClick={props.add}>ADD</button>
-            </div>
+      var Page = ReactRedux.connect(
+        /* mapStateToProps, */ (state) => ({ counter: state.counter }),
+        /* mapDispatchToProps, */ (dispatch) => ({
+          add: () => dispatch({ type: "ADD" }),
         })
+      )(function (props) {
+        return (
+          <div>
+            <p>{props.counter}</p>
+            <button onClick={props.add}>ADD</button>
+          </div>
+        );
+      });
     </script>
     <script type="text/babel">
-        function counter(state = 0, action) {
-            switch(action.type) {
-                case 'ADD': 
-                console.log(state)
-                    return state + 1;
-                default: 
-                    return state
-            }
+      function counter(state = 0, action) {
+        switch (action.type) {
+          case "ADD":
+            console.log(state);
+            return state + 1;
+          default:
+            return state;
         }
-        const store = Redux.createStore(Redux.combineReducers({counter}));
-        const {Provider} = ReactRedux;
+      }
+      const store = Redux.createStore(Redux.combineReducers({ counter }));
+      const { Provider } = ReactRedux;
 
-        function App() {
-            return <Provider store={store}>
-                    <Page/>
-                </Provider>
-        }
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<App/>);
-        
-        // width: 750rpx =  100%
-        export const radio = (function(logicWidth) {
-          return logicWidth / 750
-        })(logicWidth);
-        // 750   375  
-        // 750 * radio = logicWidth
+      function App() {
+        return (
+          <Provider store={store}>
+            <Page />
+          </Provider>
+        );
+      }
+      const root = ReactDOM.createRoot(document.getElementById("root"));
+      root.render(<App />);
+
+      // width: 750rpx =  100%
+      export const radio = (function (logicWidth) {
+        return logicWidth / 750;
+      })(logicWidth);
+      // 750   375
+      // 750 * radio = logicWidth
     </script>
-</body>
+  </body>
 </html>

@@ -1,70 +1,86 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <script src="../node_modules/react/umd/react.development.js"></script>
     <script src="../node_modules/react-dom/umd/react-dom.development.js"></script>
     <script src="../babel.min.js"></script>
-</head>
-<body>
+  </head>
+  <body>
     <div id="root"></div>
     <script type="text/babel">
-        const ThemeContext = React.createContext('light');
-        const PersonContext = React.createContext('XXX');
-        function Ancestor() {
-            const [color, setColor] = React.useState('yellow');
-            const [person, setPerson] = React.useState({name: 'zs', age: 12})
+      const ThemeContext = React.createContext("light");
+      const PersonContext = React.createContext("XXX");
+      function Ancestor() {
+        const [color, setColor] = React.useState("yellow");
+        const [person, setPerson] = React.useState({ name: "zs", age: 12 });
 
-            return <ThemeContext.Provider value={color}>
-                <button onClick={() => setColor(color === 'yellow' ? 'blue' : 'yellow')}>修改颜色</button>
-                <button onClick={() => setPerson(Object.assign({}, person, {
-                    name: person.name === 'zs' ? 'ls' : 'zs'
-                }))}>修改Person</button>
+        return (
+          <ThemeContext.Provider value={color}>
+            <button
+              onClick={() => setColor(color === "yellow" ? "blue" : "yellow")}
+            >
+              修改颜色
+            </button>
+            <button
+              onClick={() =>
+                setPerson(
+                  Object.assign({}, person, {
+                    name: person.name === "zs" ? "ls" : "zs",
+                  })
+                )
+              }
+            >
+              修改Person
+            </button>
 
-                <PersonContext.Provider value={person}>
-                    <Parent></Parent>
-                </PersonContext.Provider>
-            </ThemeContext.Provider>
-        }
-        function Parent() {
-            return <Child/>
-        }
-        // class Child extends React.Component {
-        //     render() {
-        //         return <ThemeContext.Customer>
-        //             {backgroundColor => <p style={{backgroundColor}}>this is example of class context use</p>}
-        //         </ThemeContext.Customer>
-        //     }
-        // }
-        // function Child() {
-        //     const backgroundColor = React.useContext(ThemeContext);
-        //     const person = React.useContext(PersonContext);
-        //     return <div>
-        //         <p style={{backgroundColor}}>this is example of function Component context use</p>
-        //         <p>{person.name}</p>
-        //     </div>
-        // }
-        class Child extends React.Component {
-            render() {
-                return (
-                <div>
-                    <h3>MultiContextUse</h3>
-                    <ThemeContext.Consumer>
-                    {theme => (
-                        <PersonContext.Consumer>
-                        {user => <div style={{backgroundColor: theme}}>{user.name}</div>}
-                        </PersonContext.Consumer>
+            <PersonContext.Provider value={person}>
+              <Parent></Parent>
+            </PersonContext.Provider>
+          </ThemeContext.Provider>
+        );
+      }
+      function Parent() {
+        return <Child />;
+      }
+      // class Child extends React.Component {
+      //     render() {
+      //         return <ThemeContext.Customer>
+      //             {backgroundColor => <p style={{backgroundColor}}>this is example of class context use</p>}
+      //         </ThemeContext.Customer>
+      //     }
+      // }
+      // function Child() {
+      //     const backgroundColor = React.useContext(ThemeContext);
+      //     const person = React.useContext(PersonContext);
+      //     return <div>
+      //         <p style={{backgroundColor}}>this is example of function Component context use</p>
+      //         <p>{person.name}</p>
+      //     </div>
+      // }
+      class Child extends React.Component {
+        render() {
+          return (
+            <div>
+              <h3>MultiContextUse</h3>
+              <ThemeContext.Consumer>
+                {(theme) => (
+                  <PersonContext.Consumer>
+                    {(user) => (
+                      <div style={{ backgroundColor: theme }}>{user.name}</div>
                     )}
-                    </ThemeContext.Consumer>
-                </div>
-                );
-            }
+                  </PersonContext.Consumer>
+                )}
+              </ThemeContext.Consumer>
+            </div>
+          );
         }
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<Ancestor/>);
+      }
+      const root = ReactDOM.createRoot(document.getElementById("root"));
+      root.render(<Ancestor />);
     </script>
-</body>
+  </body>
 </html>
