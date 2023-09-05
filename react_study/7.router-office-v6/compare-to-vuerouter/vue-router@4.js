@@ -15,5 +15,6 @@ const router = VueRouter.createRouter({
 
 import {createApp} from 'vue'
 import App from './App.vue'
-createApp(app)
+createApp(App)
     .use(router)
+/*  */
