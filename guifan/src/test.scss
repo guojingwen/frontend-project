@@ -1,0 +1,8 @@
+$color: blue;
+
+.box {
+  color: red;
+  .item {
+    background-color: $color;
+  }
+}
