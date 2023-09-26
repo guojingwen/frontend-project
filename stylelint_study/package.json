@@ -10,9 +10,7 @@
   "author": "dashu",
   "license": "ISC",
   "devDependencies": {
-    "postcss-lit": "^1.1.0",
     "stylelint": "^15.10.3",
-    "stylelint-config-standard": "^34.0.0",
-    "stylelint-config-standard-scss": "^11.0.0"
+    "stylelint-config-standard": "^34.0.0"
   }
 }
