@@ -1,7 +1,8 @@
 a {
+  display: grid;
   grid-template-areas:
     'a a'
-    'b b b'; /* 无效的东西，例如定义了`grid-area`没有被引用 */
+    'b b b'; /* 无效的东西，`grid-area`值不对 */
   colr: hsl(20deg 10% 30% / 5%); /* 有问题的东西，例如属性名称拼写错误 */
 }
 
@@ -15,8 +16,5 @@ a {
 
 /* 设定限制，例如ID选择器的数量 */
 #foo #bar {
-  color: red; 
+  color: red;
 }
-
-
-
