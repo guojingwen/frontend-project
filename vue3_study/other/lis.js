@@ -73,7 +73,7 @@ function getLengthOfLIS3(nums) {
         if (item < nums[center]) {
           end = center;
         } else {
-          start = center + 1;
+          st = center + 1;
         }
       }
       lis[st] = item;
