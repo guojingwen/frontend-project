@@ -15,17 +15,20 @@
     <div id="root"></div>
     <script type="text/babel">
       var Page = ReactRedux.connect(
-        /* mapStateToProps, */ (state) => ({ counter: state.counter }),
+        /* mapStateToProps, */ (state) => ({ counter: state.counter, personer: state.personer }),
         /* mapDispatchToProps */ (disptach) => ({
           add: () => disptach({ type: "ADD" }),
+          addP: () => disptach({ type: "P_ADD" }),
         })
       )(
         class extends React.Component {
           render() {
             return (
               <div>
+                <p>{this.props.personer.name}今年{this.props.personer.age}岁</p>
                 <p>{this.props.counter}</p>
                 <button onClick={this.props.add}>ADD</button>
+                <button onClick={this.props.addP}>P_ADD</button>
               </div>
             );
           }
@@ -53,7 +56,6 @@
         Redux.combineReducers({ counter, personer })
       );
       const { Provider } = ReactRedux;
-
       class App extends React.Component {
         render() {
           return (

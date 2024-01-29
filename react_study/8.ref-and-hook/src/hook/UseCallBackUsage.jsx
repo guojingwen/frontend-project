@@ -14,9 +14,9 @@ const useGetState = (initVal) => {
 }
 const NewChild = React.memo(Child);
 export default function UseCallBackUsage() {
-  const [value, setValue] = useState({ text: "" });
-  const getValue = useCallback(() => {
-    console.log(value.text);
+  const [value, setValue, getValue] = useGetState({ text: "" });
+  const getValueV = useCallback(() => {
+    console.log(getValue().text);
   }, []);
   console.log("父组件渲染");
   const onChange = (e) => {
@@ -34,7 +34,7 @@ export default function UseCallBackUsage() {
         onChange={onChange}
       />
       <hr />
-      <NewChild getValue={getValue} />
+      <NewChild getValue={getValueV} />
     </div>
   );
 }

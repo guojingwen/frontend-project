@@ -23,7 +23,7 @@ export default function PageReuse () {
     <input id="radio2" type="radio" value={2} checked={radio === 2}
     onChange={() => setRadio(2)}/>
     {/* <br /> */}
-    {radio === 1 ? <PageA/> : <PageB/>}
+    {radio === 1 ? <PageA data-src="sd" asa={1}/> : <PageB/>}
   </div>
 }
 
@@ -60,6 +60,9 @@ function CommonPageList (WrappedComponent, fetchingMethod, defaultProps = {
         list: [],
         isRequesting: true,
       }
+      constructor(props) {
+        super(props);
+      }
       async componentDidMount() {
         const list = await fetchingMethod();
         this.setState({
@@ -68,17 +71,20 @@ function CommonPageList (WrappedComponent, fetchingMethod, defaultProps = {
         });
       }
       render() {
+        console.log(this.props)
+        debugger
         if(this.state.isRequesting) {
           return <p>{defaultProps.loading}</p>
         }
         if(!this.state.list.length) {
           return <p>{defaultProps.emptyText}</p>
         }
-        return <WrappedComponent 
+        return <div {...this.props}>
+          <WrappedComponent 
           {...defaultProps}
-          {...this.props}
           list={this.state.list}
         />
+        </div>
       }
    }
 }

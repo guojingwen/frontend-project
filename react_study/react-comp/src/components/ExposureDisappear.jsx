@@ -39,7 +39,7 @@ class ExposureDisappear extends React.Component {
   }
   visibilitychange = ()=> {
     requestIdleCallback(() => {
-      if(document.hidden) {
+      if(document.visibilityState === 'hidden') {
         this.el.setAttribute('style', 'display: none');
       } else {
         this.el.setAttribute('style', '');

@@ -11,7 +11,7 @@ const router = new VueRouter({
 })
 
 // App.vue
-// template里面放置router-vue
+// template里面放置<router-view/>
 
 import Vue from 'vue'
 import router from './router'
