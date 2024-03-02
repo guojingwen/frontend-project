@@ -13,6 +13,8 @@ import ExposureDisappear from './components/ExposureDisappear';
 
 import PerformanceMonitoring from './components/reverseExtends/PerformanceMonitoring';
 
+import SearchDemo from './components/demo/SearchDemo'
+
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <h2>React组件化技术之高阶函数</h2>
@@ -33,6 +35,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <NavLink to='/ErrorBoundary' className={getLinkClass}>错误降级</NavLink>
         <NavLink to='/FuncRefush' className={getLinkClass}>function组件强刷</NavLink>
         <NavLink to="/ExposureDisappear" className={getLinkClass}>埋点上报</NavLink>
+        <NavLink to="/SearchDemo" className={getLinkClass}>搜索案例</NavLink>
       </fieldset>
       <fieldset>
         <legend>React18新特性</legend>
@@ -51,6 +54,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route path='/ErrorBoundary' element={<ErrorBoundary/>}></Route>
         <Route path='/FuncRefush' element={<FuncRefush/>}></Route>
         <Route path='/ExposureDisappear' element={<ExposureDisappear/>}></Route>
+        <Route path="/SearchDemo" element={<SearchDemo/>}>搜索案例</Route>
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

@@ -1,0 +1,9 @@
+<p>timer works!</p>
+<div>
+  <input type="number" #Input [(ngModel)]="number">
+  <hr>
+  <span>倒计时： {{number}}</span><br>
+  <button (click)="start()">开始</button>
+  &nbsp;&nbsp;
+  <button (click)="end()">暂停</button>
+</div>
