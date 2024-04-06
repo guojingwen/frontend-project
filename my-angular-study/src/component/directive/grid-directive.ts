@@ -4,11 +4,11 @@ import { Directive, ElementRef, Renderer2 } from "@angular/core";
   selector: '[appGridItem]'
 })
 export class GridItemDirective {
-  constructor(private elr: ElementRef, private rd2: Renderer2) {
-    rd2.setStyle(this.elr.nativeElement, 'display', 'grid');
-    rd2.setStyle(this.elr.nativeElement, 'grid-template-areas', `'image' 'title'`);
-    rd2.setStyle(this.elr.nativeElement, 'place-items', 'center');
-    rd2.setStyle(this.elr.nativeElement, 'width', '4rem');
+  constructor(private el: ElementRef, private rd2: Renderer2) {
+    rd2.setStyle(el.nativeElement, 'display', 'grid');
+    rd2.setStyle(el.nativeElement, 'grid-template-areas', `\'image\' \'title\'`);
+    rd2.setStyle(el.nativeElement, 'place-items', 'center');
+    rd2.setStyle(el.nativeElement, 'width', '4rem');
   }
 }
 
@@ -16,7 +16,7 @@ export class GridItemDirective {
   selector: '[appGridItemTitle]'
 })
 export class GridTitleDirective {
-  constructor(private elr: ElementRef, private rd2: Renderer2) {
-    rd2.setStyle(this.elr.nativeElement, 'grid-area', 'title');
+  constructor(private el: ElementRef, private rd2: Renderer2) {
+    rd2.setStyle(this.el.nativeElement, 'grid-area', 'title');
   }
 }

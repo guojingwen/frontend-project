@@ -7,6 +7,7 @@ import { HeroDetailComponent } from './hero-detail/hero-detail.component';
 import { TimerComponent } from './timer/timer.component';
 import { NgmodelComponent } from '../component/ngmodel/ngmodel.component';
 import { DirectiveComponent } from 'src/component/directive/directive.component';
+// import { HighlightDirective } from 'src/component/directive/highlight.directive';
 
 const routes: Routes = [
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
@@ -15,7 +16,7 @@ const routes: Routes = [
   { path: 'heroes', component: HeroesComponent },
   { path: 'timer', component: TimerComponent },
   { path: 'ngmodel', component: NgmodelComponent },
-  { path: 'directive', component: DirectiveComponent }
+  { path: 'directive', component: DirectiveComponent, runGuardsAndResolvers: 'always' }
 ];
 
 @NgModule({

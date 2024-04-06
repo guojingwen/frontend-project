@@ -6,5 +6,6 @@ import { Component } from '@angular/core';
   templateUrl: './directive.component.html',
 })
 export class DirectiveComponent {
+  color = 'blue'
 
 }

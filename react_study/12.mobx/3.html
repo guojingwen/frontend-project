@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../node_modules/react/umd/react.development.js"></script>
+    <script src="../node_modules/react-dom/umd/react-dom.development.js"></script>
+    <script src="../babel.min.js"></script>
+    <!-- <script src="./node_modules/mobx/dist/mobx.esm.development.js"></script> -->
+</head>
+<body>
+    <div id="reactjs-app"></div>
+    <script  type="text/babel">
+        import {makeObservable, observable, autorun, computed, action} from './node_modules/mobx/dist/mobx.esm.development.js';
+
+        class ObservableTodoStore {
+            todos = [];
+
+            constructor() {
+                makeObservable(this, {
+                    todos: observable,
+                    completedTodosCount: computed,
+                    // report: computed,
+                    addTodo: action,
+                });
+                autorun(() => console.log(this.report()));
+            }
+            get completedTodosCount() {
+                return this.todos.filter(
+                todo => todo.completed === true
+                ).length;
+            }
+            report() {
+                if (this.todos.length === 0)
+                return "<无>";
+                const nextTodo = this.todos.find(todo => todo.completed === false);
+                return `下一个待办："${nextTodo ? nextTodo.task : "<无>"}"。 ` +
+                `进度：${this.completedTodosCount}/${this.todos.length}`;
+            }
+            addTodo(task) {
+                this.todos.push({
+                task: task,
+                completed: false,
+                assignee: null
+                });
+            }
+        }
+        const TodoList = observer(({store}) => {
+            const addTodo = () => {
+                store.addTodo(prompt(''))
+            }
+            return (
+                <div>
+                    {store.report}
+                    <ul>
+                        {
+                            store.todos.map(
+                                (todo, idx) => <TodoView todo={ todo } key={ idx } />
+                            )
+                        }
+                    </ul>
+                    { store.pendingRequests > 0 ? <marquee>正在加载……</marquee> : null }
+                    <button onClick={ addTodo }>新待办</button>
+                    <small>（双击待办进行编辑）</small>
+                    <RenderCounter />
+                </div>
+            )
+        });
+        const TodoView = observer(({todo}) => {
+            const onToggleCompleted = () => {
+                todo.completed = !todo.completed;
+            }
+
+            const onRename = () => {
+                todo.task = prompt('任务名称', todo.task) || todo.task;
+            }
+
+            return (
+                <li onDoubleClick={ onRename }>
+                    <input
+                        type='checkbox'
+                        checked={ todo.completed }
+                        onChange={ onToggleCompleted }
+                    />
+                    { todo.task }
+                    { todo.assignee
+                        ? <small>{ todo.assignee.name }</small>
+                        : null
+                    }
+                    <RenderCounter />
+                </li>
+            );
+        })
+
+        const store = observableTodoStore;
+        store.todos[0].completed = !store.todos[0].completed;
+        store.todos[1].task = "随机待办 " + Math.random();
+        store.todos.push({ task: "找到一块好奶酪", completed: true });
+        ReactDOM.render(
+            <TodoList store={ observableTodoStore } />,
+            document.getElementById('reactjs-app')
+        );
+    </script>
+</body>
+</html>
