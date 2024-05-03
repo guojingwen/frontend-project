@@ -1,23 +1,13 @@
-import logo from './logo.svg';
-import './App.css';
+import TimerView from "./components/Timer";
+import App2 from "./app2/App2"
+import App3 from "./app3/App3"
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <TimerView/>
+      <App2 />
+      <App3 />
     </div>
   );
 }
