@@ -2,12 +2,10 @@ import {makeObservable, observable, computed, action, autorun} from 'mobx'
 
 class ObservableTodoStore {
     todos = [];
-    pendingRequests = 0;
   
     constructor() {
       makeObservable(this, {
         todos: observable,
-        pendingRequests: observable,
         completedTodosCount: computed,
         report: computed,
         addTodo: action,
@@ -33,7 +31,6 @@ class ObservableTodoStore {
       this.todos.push({
         task: task,
         completed: false,
-        assignee: null
       });
     }
   }

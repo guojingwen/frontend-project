@@ -14,10 +14,8 @@ export const TodoList = observer(({store}) => {
                 (todo, idx) => <TodoView todo={ todo } key={ idx } />
                 ) }
             </ul>
-            { store.pendingRequests > 0 ? <marquee>Loading...</marquee> : null }
             <button onClick={ onNewTodo }>New Todo</button>
             <small> (double-click a todo to edit)</small>
-            {/* <RenderCounter /> */}
         </div>
     );
 })
@@ -39,11 +37,6 @@ export const TodoView = observer(({todo}) => {
           onChange={ onToggleCompleted }
         />
         { todo.task }
-        { todo.assignee
-          ? <small>{ todo.assignee.name }</small>
-          : null
-        }
-        {/* <RenderCounter /> */}
       </li>
     );
 })
