@@ -1,16 +1,25 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
-import reportWebVitals from './reportWebVitals';
+import AppTimer from './AppTimer'
+import AppTimer2 from './AppTimer2'
+import AppTimer3 from './AppTimer3'
+import AppTimer4 from './AppTimer4'
+import AppTimer5 from './AppTimer5'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <App />
+    <hr />
+    <AppTimer />
+    <hr />
+    <AppTimer2 />
+    <hr />
+    <AppTimer3 />
+    <hr />
+    <AppTimer4 />
+    <hr />
+    <AppTimer5 />
   </React.StrictMode>
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();

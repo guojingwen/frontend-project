@@ -6,6 +6,14 @@ class App extends React.Component {
         super(props);
         makeObservable(this);
     }
+    componentDidMount() {
+        this.timer = setInterval(() => {
+            this.add();
+        }, 1000)
+    }
+    componentWillUnmount() {
+        clearInterval(this.timer)
+    }
     @observable
     count = 0;
 
@@ -13,12 +21,16 @@ class App extends React.Component {
     add = () => {
         ++this.count;
     }
+    @action
+    reset = () => {
+        this.count = 0;
+    }
     render() {
         return <Observer>
             {
                 () => <div>
                     <p>{this.count}</p>
-                    <button onClick={this.add}>ADD</button>
+                    <button onClick={this.reset}>reset</button>
                 </div>
             }
         </Observer>
