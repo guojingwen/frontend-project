@@ -181,3 +181,23 @@ export default {
  * computed的缓存
  */
 
+
+// Vue重写数组的7个方法
+
+var arrayProto = Array.prototype;
+const arrayMethods = Object.create(arrayProto);
+Object.defineProperty(arrayMethods, 'push', {
+    value: function(...args) {
+        console.log(' 拦截了 array push 方法');
+        const result = arrayProto.push.apply(this, args);
+        return result;
+    }
+})
+function createArray(arr) {
+    Object.setPrototypeOf(arr, arrayMethods);
+    return arr;
+}
+
+var arr = createArray([1]);
+arr.push(3);
+

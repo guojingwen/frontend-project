@@ -25,11 +25,11 @@
                 }
                 return null
             }
-						changeColor = () => {
-							this.setState({
-									color: this.state.color === 'yellow' ? 'red' : 'yellow'
-							})
-						}
+            changeColor = () => {
+                this.setState({
+                    color: this.state.color === 'yellow' ? 'red' : 'yellow'
+                })
+            }
             render () {
                 console.log('render');
                 return <div>
@@ -48,9 +48,9 @@
 
         function App() {
             const [color, setColor] = React.useState('black');
-						const changeColor = () => {
-							setColor(color === 'black' ? 'yellow' : 'black')
-						}
+            const changeColor = () => {
+                setColor(color === 'black' ? 'yellow' : 'black')
+            }
             return (<div>
                 <button onClick={changeColor}>改变props颜色</button>
                 <hr/>

@@ -26,12 +26,12 @@ class ScrollingList extends React.Component {
     // throttle debounce
     onScroll = throttle((e) => {
         // 判断滚动方向，
-        // 假如如果是 下拉加载前一页
+        // 如果是 下拉加载前一页
         direction = 'pull-down'
-    }, 300)
+    }, 300);
     render() {
       return (
         <div ref={this.listRef} onScroll={this.onScroll}>{/* ...contents... */}</div>
       );
     }
-  }
+}

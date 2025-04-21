@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div>
+    <div>严格模式</div>
+  </div>
+  <script>
+    // 'use strict';
+    console.log(this);
+    function fa() {
+      console.log('fa', this)
+    }
+    fa();
+
+  </script>
+  <script type="module">
+    function testNonStrict() {
+      eval('var x = 10;');
+      console.log(x); // 输出 10 - x 泄漏到了函数作用域
+    }
+    testNonStrict();
+  </script>
+
+</body>
+</html>

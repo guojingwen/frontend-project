@@ -20,8 +20,7 @@
 <body>
     <div id="root"></div>
     <script type="text/babel">
-      // 该案例请使用safari浏览器演示
-      // chrome渲染过程中做了优化，修改了scrollTop
+      // 该Demo演示展示最新的新闻，并滚动到最顶部
       class Chat extends React.Component {
         state = {
           news: []
@@ -32,7 +31,7 @@
             this.setState({
               news: ['新闻' + (news.length + 1), ...news]
             });
-          }, 1000)
+          }, 2000)
         }
         getSnapshotBeforeUpdate() {
           return this.refs.chat.scrollHeight;
@@ -41,7 +40,7 @@
           window._this = this;
           const diff= this.refs.chat.scrollHeight - snapshot
           console.log(this.refs.chat.scrollTop, diff);
-          this.refs.chat.scrollTop += diff;
+          this.refs.chat.scrollTop -= diff;
         }
         render() {
           return <div ref="chat" className="chat">

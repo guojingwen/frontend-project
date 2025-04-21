@@ -16,7 +16,7 @@
       function combineReducers(reducers) {
         const keys = Object.keys(reducers);
         return function combination(state = {}, action) {
-          const nextState = {};
+          const nextState = {...state};
           keys.forEach((key) => {
             const reducer = reducers[key];
             const prev = state[key];

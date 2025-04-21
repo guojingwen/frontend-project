@@ -9,7 +9,7 @@ class AppStore {
     return `一共${this.todos.length}条`
   }
 
-  @action addTodo(todo) {
+  @action.bound addTodo(todo) {
     this.todos.push(todo)
   }
   @action deleteTodo() {
